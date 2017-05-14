@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Notifications"
             android:textSize="22sp"/>
-        <ScrollView android:id="@+id/urlScrollView"
+        <ScrollView android:id="@+id/notificationScrollView"
                 android:layout_width="match_parent"
                 android:padding="5dp">
             <TableLayout android:id="@+id/notificationTableLayout"
@@ -50,9 +50,15 @@
             android:layout_height="wrap_content"
             android:text="History"
             android:textSize="22sp"/>
-        <TableRow>
-
-        </TableRow>
+        <ScrollView android:id="@+id/historyScrollView"
+            android:layout_width="match_parent"
+            android:padding="5dp">
+            <TableLayout android:id="@+id/historyTableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:padding="5dp"
+                android:stretchColumns="*">
+            </TableLayout>
+        </ScrollView>
     </TableLayout>
 
 </LinearLayout>
