@@ -27,6 +27,7 @@ public class Main2Activity extends AppCompatActivity {
                 realLogin();
             }
         });
+        notificationTableLayout = (TableLayout) findViewById(R.id.notificationTableLayout);
 
     }
     private void realLogin(){
@@ -38,7 +39,7 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 String userString=username.getText().toString();
                 if(userString.equals("admin")&&password.getText().toString().equals("admin")){
-                    setContentView(R.layout.store_history);
+
                     storeHistory(userString);
                 }
 
@@ -46,15 +47,18 @@ public class Main2Activity extends AppCompatActivity {
         });
     }
     private void storeHistory(String userText){
+        setContentView(R.layout.store_history);
         final TextView welcome_UserText=(TextView)findViewById(R.id.welcome_UserText);
         welcome_UserText.setText("Welcome: "+userText);
+        ViewGroup v=(ViewGroup)findViewById(R.id.notificationTableLayout);
+        makeNotificationGUI("Dummy notivication",0,v);
     }
     private void makeNotificationGUI(String tag, int index, ViewGroup v) {
         // get a reference to the LayoutInflater service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // inflate new_tag_view.xml to create new row and set up the contained Buttons
-        View newTagView = inflater.inflate(R.layout.notification_view, v);
+        View newTagView = inflater.inflate(R.layout.notification_view, v,false);
 
         // get newTagButton reference, set its text and register its listener
         Button newNotificationButton = (Button) newTagView.findViewById(R.id.newNotification);
@@ -63,7 +67,7 @@ public class Main2Activity extends AppCompatActivity {
         newNotificationButton.setOnClickListener(storeButtonListener);
 
         // add new tag and edit buttons to urlTableLayout at specified row number (index)
-        notificationTableLayout.addView(newTagView, index);
+        v.addView(newTagView, index);
     }
     public View.OnClickListener storeButtonListener = new View.OnClickListener() {
         @Override
