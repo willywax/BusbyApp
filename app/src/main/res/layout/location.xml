@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp">
+        <TextView
+            android:id="@+id/Location_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Sandton City"
+            android:textAlignment="gravity"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/new_Post_Specific"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_alignParentEnd="true"
+            android:text="+"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/location_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <ScrollView android:id="@+id/LocationThreadScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TableLayout android:id="@+id/LocationThreadTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:padding="5dp"
+            android:stretchColumns="*">
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

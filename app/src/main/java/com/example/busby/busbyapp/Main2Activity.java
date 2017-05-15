@@ -29,6 +29,8 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -111,6 +113,29 @@ public class Main2Activity extends AppCompatActivity {
             }
         });
     }
+    private void locationMethod(String location){
+        setContentView(R.layout.location);
+        final TextView Location_name=(TextView)findViewById(R.id.Location_name);
+        Location_name.setText(location);
+        ViewGroup vgLocation=(ViewGroup)findViewById(R.id.LocationThreadTableLayout);
+        Spinner locationSpinner=(Spinner)findViewById(R.id.location_spinner);
+        String[]tempThreads=new String[]{"Edgars","Markham"};
+
+        ArrayAdapter <String>newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
+        newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(newThreadsAdapter);
+        makeLocationGUI("Dummy location comment",0,vgLocation);
+
+        final Button newPostSpecific=(Button)findViewById(R.id.new_Post_Specific);
+        newPostSpecific.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                newPostMethod();
+            }
+        });
+
+
+
+    }
     private void makeNotificationGUI(String tag, int index, ViewGroup v) {
         // get a reference to the LayoutInflater service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -143,6 +168,27 @@ public class Main2Activity extends AppCompatActivity {
         // add new tag and edit buttons to urlTableLayout at specified row number (index)
         v.addView(newTagView, index);
     }
+    private void makeLocationGUI(String comment, int index, ViewGroup v) {
+        // get a reference to the LayoutInflater service
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // inflate new_tag_view.xml to create new row and set up the contained Buttons
+        View newTagView = inflater.inflate(R.layout.thread_view, v,false);
+
+        // get newTagButton reference, set its text and register its listener
+        Spinner locationThreadSpinner=(Spinner)newTagView.findViewById(R.id.newThreadSpinner);
+        String[]tempThreads=new String[]{"Needs Review","Awaiting Response","Completed"};
+
+        ArrayAdapter <String>newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
+        newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationThreadSpinner.setAdapter(newThreadsAdapter);
+
+        TextView newThreadTextView=(TextView) newTagView.findViewById(R.id.newThreadTextView);
+        newThreadTextView.setText(comment);
+
+        // add new tag and edit buttons to urlTableLayout at specified row number (index)
+        v.addView(newTagView, index);
+    }
 
     public View.OnClickListener storeButtonListener = new View.OnClickListener() {
         @Override
@@ -150,6 +196,7 @@ public class Main2Activity extends AppCompatActivity {
 
             String buttonText = ((Button) v).getText().toString();
             Log.v("storeButtonListener","going to page "+buttonText);
+            locationMethod(buttonText);
         }
     };
     //from here its the image handeling code taken from the link in build 1 resources and adapted

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/newThreadTableRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+    <!--shrunk to fit-->
+    <ImageView
+        android:id="@+id/newThreadImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Spinner
+        android:id="@+id/newThreadSpinner"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        />
+
+    <TextView
+        android:id="@+id/newThreadTextView"
+        android:inputType="text"
+        android:text="some random comment"
+        android:textSize="8pt" />
+
+
+
+</TableLayout>
