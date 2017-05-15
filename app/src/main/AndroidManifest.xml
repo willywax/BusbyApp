@@ -16,13 +16,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Main2Activity">
+        <activity android:name=".Landing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Login"/>
+        <activity android:name=".Store_History"/>
+        <activity android:name=".Location"/>
+        <activity android:name=".New_Post"/>
     </application>
 
 </manifest>

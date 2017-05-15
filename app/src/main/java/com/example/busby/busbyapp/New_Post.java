@@ -8,28 +8,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,59 +29,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class Main2Activity extends AppCompatActivity {
-    private TableLayout notificationTableLayout;
-    private TableLayout historyTableLayout;
-    private String userChoosenTask;
+/**
+ * Created by hanop on 2017/05/15.
+ */
+
+public class New_Post extends AppCompatActivity {
     private ImageButton postImageButton;
     private Button newPostSubmitButton;
     final int REQUEST_CAMERA=0,SELECT_FILE=1;
-    @Override
+    private String userChoosenTask;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landing);
-        notificationTableLayout = (TableLayout) findViewById(R.id.notificationTableLayout);
-        final Button login_button = (Button) findViewById(R.id.firstLoginButton);
+        setContentView(R.layout.login_screen);
 
-        login_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setContentView(R.layout.login_screen);
-                realLogin();
-            }
-        });
-        notificationTableLayout = (TableLayout) findViewById(R.id.notificationTableLayout);
-
-    }
-    private void realLogin(){
-        final EditText username=(EditText)findViewById(R.id.username_input);
-        final EditText password=(EditText)findViewById(R.id.password_input);
-        final Button real_login_button = (Button) findViewById(R.id.real_login);
-
-        real_login_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String userString=username.getText().toString();
-                if(userString.equals("admin")&&password.getText().toString().equals("admin")){
-
-                    storeHistory(userString);
-                }
-
-            }
-        });
-    }
-    private void storeHistory(String userText){
-        setContentView(R.layout.store_history);
-        final TextView welcome_UserText=(TextView)findViewById(R.id.welcome_UserText);
-        final Button newPost=(Button)findViewById(R.id.new_Post);
-        newPost.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                newPostMethod();
-            }
-        });
-        welcome_UserText.setText("Welcome: "+userText);
-        ViewGroup vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
-        makeNotificationGUI("Dummy notification",0,vgNotification);
-        ViewGroup vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
-        makeHistoryGUI("Dummy History",0,vgHistory);
+        String username = getIntent().getStringExtra("Username");
+        newPostMethod();
     }
     private void newPostMethod(){
         setContentView(R.layout.new_post_view);
@@ -103,7 +57,7 @@ public class Main2Activity extends AppCompatActivity {
         final Spinner newPostThreadSpinner=(Spinner)findViewById(R.id.newPostThreadSpinner);
         String[]tempThreads=new String[]{"Cycle1","Cycle2","Cycle3"};
 
-        ArrayAdapter <String>ThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
+        ArrayAdapter<String> ThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
         ThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newPostThreadSpinner.setAdapter(ThreadsAdapter);
         newPostSubmitButton=(Button)findViewById(R.id.newPostSubmitButton);
@@ -113,102 +67,16 @@ public class Main2Activity extends AppCompatActivity {
             }
         });
     }
-    private void locationMethod(String location){
-        setContentView(R.layout.location);
-        final TextView Location_name=(TextView)findViewById(R.id.Location_name);
-        Location_name.setText(location);
-        ViewGroup vgLocation=(ViewGroup)findViewById(R.id.LocationThreadTableLayout);
-        Spinner locationSpinner=(Spinner)findViewById(R.id.location_spinner);
-        String[]tempThreads=new String[]{"Edgars","Markham"};
-
-        ArrayAdapter <String>newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
-        newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        locationSpinner.setAdapter(newThreadsAdapter);
-        makeLocationGUI("Dummy location comment",0,vgLocation);
-
-        final Button newPostSpecific=(Button)findViewById(R.id.new_Post_Specific);
-        newPostSpecific.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                newPostMethod();
-            }
-        });
-
-
-
-    }
-    private void makeNotificationGUI(String tag, int index, ViewGroup v) {
-        // get a reference to the LayoutInflater service
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // inflate new_tag_view.xml to create new row and set up the contained Buttons
-        View newTagView = inflater.inflate(R.layout.notification_view, v,false);
-
-        // get newTagButton reference, set its text and register its listener
-        Button newNotificationButton = (Button) newTagView.findViewById(R.id.newNotification);
-        newNotificationButton.setText(tag);
-
-        newNotificationButton.setOnClickListener(storeButtonListener);
-
-        // add new tag and edit buttons to urlTableLayout at specified row number (index)
-        v.addView(newTagView, index);
-    }
-    private void makeHistoryGUI(String tag, int index, ViewGroup v) {
-        // get a reference to the LayoutInflater service
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // inflate new_tag_view.xml to create new row and set up the contained Buttons
-        View newTagView = inflater.inflate(R.layout.history_view, v,false);
-
-        // get newTagButton reference, set its text and register its listener
-        Button newHistoryButton = (Button) newTagView.findViewById(R.id.newHistory);
-        newHistoryButton.setText(tag);
-
-        newHistoryButton.setOnClickListener(storeButtonListener);
-
-        // add new tag and edit buttons to urlTableLayout at specified row number (index)
-        v.addView(newTagView, index);
-    }
-    private void makeLocationGUI(String comment, int index, ViewGroup v) {
-        // get a reference to the LayoutInflater service
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // inflate new_tag_view.xml to create new row and set up the contained Buttons
-        View newTagView = inflater.inflate(R.layout.thread_view, v,false);
-
-        // get newTagButton reference, set its text and register its listener
-        Spinner locationThreadSpinner=(Spinner)newTagView.findViewById(R.id.newThreadSpinner);
-        String[]tempThreads=new String[]{"Needs Review","Awaiting Response","Completed"};
-
-        ArrayAdapter <String>newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
-        newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        locationThreadSpinner.setAdapter(newThreadsAdapter);
-
-        TextView newThreadTextView=(TextView) newTagView.findViewById(R.id.newThreadTextView);
-        newThreadTextView.setText(comment);
-
-        // add new tag and edit buttons to urlTableLayout at specified row number (index)
-        v.addView(newTagView, index);
-    }
-
-    public View.OnClickListener storeButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            String buttonText = ((Button) v).getText().toString();
-            Log.v("storeButtonListener","going to page "+buttonText);
-            locationMethod(buttonText);
-        }
-    };
     //from here its the image handeling code taken from the link in build 1 resources and adapted
     private void selectImage() {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(Main2Activity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(New_Post.this);
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result=Utility.checkPermission(Main2Activity.this);
+                boolean result= New_Post.Utility.checkPermission(New_Post.this);
                 if (items[item].equals("Take Photo")) {
                     userChoosenTask="Take Photo";
                     if(result)
@@ -273,7 +141,7 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+            case New_Post.Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(userChoosenTask.equals("Take Photo"))
                         cameraIntent();
