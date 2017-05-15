@@ -35,7 +35,19 @@ public class Location extends AppCompatActivity {
         ArrayAdapter<String> newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
         newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(newThreadsAdapter);
+
+
+        Spinner cycleSpinner=(Spinner)findViewById(R.id.cycle_spinner);
+        String[]tempCycle=new String[]{"Cycle1","Cycle2"};
+
+        ArrayAdapter<String> newCycleAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempCycle);
+        newCycleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cycleSpinner.setAdapter(newCycleAdapter);
         makeLocationGUI("Dummy location comment",0,vgLocation);
+        makeLocationGUI("Dummy location comment",1,vgLocation);
+        makeLocationGUI("Dummy location comment",2,vgLocation);
+        makeLocationGUI("Dummy location comment",3,vgLocation);
+        makeLocationGUI("Dummy location comment",4,vgLocation);
 
         final Button newPostSpecific=(Button)findViewById(R.id.new_Post_Specific);
         newPostSpecific.setOnClickListener(new View.OnClickListener(){

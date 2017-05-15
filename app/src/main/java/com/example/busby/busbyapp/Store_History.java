@@ -37,6 +37,8 @@ public class Store_History extends AppCompatActivity {
         welcome_UserText.setText("Welcome: "+userText);
         ViewGroup vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
         makeNotificationGUI("Dummy notification",0,vgNotification);
+        makeNotificationGUI("Dummy notification",1,vgNotification);
+
         ViewGroup vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
         makeHistoryGUI("Dummy History",0,vgHistory);
     }
