@@ -3,6 +3,7 @@ package com.example.busby.busbyapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,6 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_screen);
         realLogin();
-
     }
     private void realLogin(){
         final EditText username=(EditText)findViewById(R.id.username_input);
@@ -31,10 +31,15 @@ public class Login extends AppCompatActivity {
                     Intent intent = new Intent(Login.this,Store_History.class);
                     intent.putExtra("Username",userString);
                     startActivity(intent);
+
                     finish();
                 }
 
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+        moveTaskToBack(true);
     }
 }

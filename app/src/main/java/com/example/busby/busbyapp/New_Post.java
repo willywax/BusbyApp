@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -40,8 +41,6 @@ public class New_Post extends AppCompatActivity {
     private String userChoosenTask;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_screen);
-
         String username = getIntent().getStringExtra("Username");
         newPostMethod();
     }
@@ -66,6 +65,15 @@ public class New_Post extends AppCompatActivity {
                 Log.v("Spinner item is: ",""+newPostThreadSpinner.getSelectedItem().toString());
             }
         });
+    }
+    public static void goUpToTopActivity(final Activity currentActivity) {
+        final Intent intent = NavUtils.getParentActivityIntent(currentActivity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        NavUtils.navigateUpTo(currentActivity, intent);
+    }
+    @Override
+    public void onBackPressed(){
+        moveTaskToBack(true);
     }
     //from here its the image handeling code taken from the link in build 1 resources and adapted
     private void selectImage() {

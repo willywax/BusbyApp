@@ -3,6 +3,7 @@ package com.example.busby.busbyapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +19,7 @@ import android.widget.TextView;
 public class Store_History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_screen);
-
+        setContentView(R.layout.store_history);
         String username = getIntent().getStringExtra("Username");
         storeHistory(username);
     }
@@ -31,7 +31,7 @@ public class Store_History extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(Store_History.this,New_Post.class);
                 startActivity(intent);
-                finish();
+                moveTaskToBack(true);
             }
         });
         welcome_UserText.setText("Welcome: "+userText);
@@ -83,7 +83,6 @@ public class Store_History extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(),Location.class);
             intent.putExtra("LocationName",buttonText);
             startActivity(intent);
-            finish();
         }
     };
 }
