@@ -3,7 +3,6 @@ package com.example.busby.busbyapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +30,6 @@ public class Store_History extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(Store_History.this,New_Post.class);
                 startActivity(intent);
-                //moveTaskToBack(true);
             }
         });
         welcome_UserText.setText("Welcome: "+userText);
@@ -85,4 +83,5 @@ public class Store_History extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
 }

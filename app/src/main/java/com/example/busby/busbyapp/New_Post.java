@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,16 +64,8 @@ public class New_Post extends AppCompatActivity {
             }
         });
     }
-    public static void goUpToTopActivity(final Activity currentActivity) {
-        final Intent intent = NavUtils.getParentActivityIntent(currentActivity);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        NavUtils.navigateUpTo(currentActivity, intent);
-    }
-    @Override
-    public void onBackPressed(){
-        moveTaskToBack(true);
-    }
-    //from here its the image handeling code taken from the link in build 1 resources and adapted
+
+    //from here its the image handling code taken from the link in build 1 resources and adapted
     private void selectImage() {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
