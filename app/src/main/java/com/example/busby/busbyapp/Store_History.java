@@ -31,7 +31,7 @@ public class Store_History extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(Store_History.this,New_Post.class);
                 startActivity(intent);
-                moveTaskToBack(true);
+                //moveTaskToBack(true);
             }
         });
         welcome_UserText.setText("Welcome: "+userText);

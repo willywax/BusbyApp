@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Welcome:"
+            android:text="@string/welcome"
             android:textAlignment="gravity"
             android:textSize="30sp" />
 
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_alignParentEnd="true"
-            android:text="+"
+            android:text="@string/newPost"
             android:textSize="20sp" />
 
     </RelativeLayout>
@@ -32,7 +32,7 @@
             android:id="@+id/NotificationsLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Notifications"
+            android:text="@string/notification"
             android:textSize="22sp"/>
         <ScrollView android:id="@+id/notificationScrollView"
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:id="@+id/History"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="History"
+            android:text="@string/history"
             android:textSize="22sp"/>
         <ScrollView android:id="@+id/historyScrollView"
             android:layout_width="match_parent"
