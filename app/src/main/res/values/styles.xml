@@ -41,5 +41,15 @@
         <item name="android:layout_height">wrap_content</item>
 
     </style>
+    <style name="checkBox_style" >
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:checkable">true</item>
+        <item name="android:checkboxStyle">@style/checkBox_background</item>
+
+    </style>
+    <style name="checkBox_background">
+        <item name="android:background">@color/white</item>
+        </style>
 
 </resources>

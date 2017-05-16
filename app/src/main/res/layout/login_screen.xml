@@ -53,6 +53,14 @@
 
             />
 
+        <CheckBox
+            android:id="@+id/checkBox"
+            style="@style/checkBox_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Remember Password"
+           />
+
         <Button
             style="@style/button_style"
             android:id="@+id/real_login"
