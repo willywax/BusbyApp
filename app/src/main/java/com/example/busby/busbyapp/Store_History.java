@@ -19,7 +19,7 @@ public class Store_History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_history);
-        String username = getIntent().getStringExtra("Username");
+        String username = getIntent().getStringExtra("username");
         storeHistory(username);
     }
     private void storeHistory(String userText){
