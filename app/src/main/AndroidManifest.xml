@@ -28,7 +28,7 @@
         <activity android:name=".Login"
             android:label="Login"/>
         <activity android:name=".Store_History"
-            android:label="Store_History"
+            android:label="Store History"
             android:launchMode="singleTask"
             android:alwaysRetainTaskState="true">
         </activity>
@@ -36,7 +36,7 @@
             android:label="Location"
             android:parentActivityName=".Store_History"/>
         <activity android:name=".New_Post"
-            android:label="New_Post"
+            android:label="New Post"
             android:launchMode="singleTop"
             android:parentActivityName=".Store_History"/>
     </application>

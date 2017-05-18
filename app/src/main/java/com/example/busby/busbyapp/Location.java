@@ -2,6 +2,7 @@ package com.example.busby.busbyapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,9 +45,6 @@ public class Location extends AppCompatActivity {
         cycleSpinner.setAdapter(newCycleAdapter);
         makeLocationGUI("Dummy location comment",0,vgLocation);
         makeLocationGUI("Dummy location comment",1,vgLocation);
-        makeLocationGUI("Dummy location comment",2,vgLocation);
-        makeLocationGUI("Dummy location comment",3,vgLocation);
-        makeLocationGUI("Dummy location comment",4,vgLocation);
 
         final Button newPostSpecific=(Button)findViewById(R.id.new_Post_Specific);
         newPostSpecific.setOnClickListener(new View.OnClickListener(){
@@ -78,7 +77,8 @@ public class Location extends AppCompatActivity {
 
         TextView newThreadTextView=(TextView) newTagView.findViewById(R.id.newThreadTextView);
         newThreadTextView.setText(comment);
-
+        ImageView tempImage=(ImageView)newTagView.findViewById(R.id.newThreadImage) ;
+        tempImage.setImageResource(R.drawable.guess);
         // add new tag and edit buttons to urlTableLayout at specified row number (index)
         v.addView(newTagView, index);
     }

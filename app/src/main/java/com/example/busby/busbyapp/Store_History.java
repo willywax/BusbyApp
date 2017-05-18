@@ -34,11 +34,12 @@ public class Store_History extends AppCompatActivity {
         });
         welcome_UserText.setText("Welcome: "+userText);
         ViewGroup vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
-        makeNotificationGUI("Dummy notification",0,vgNotification);
-        makeNotificationGUI("Dummy notification",1,vgNotification);
+        makeNotificationGUI("Photo at Sandton City awaiting response",0,vgNotification);
 
         ViewGroup vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
-        makeHistoryGUI("Dummy History",0,vgHistory);
+        makeHistoryGUI("Sandton City",0,vgHistory);
+        makeHistoryGUI("Cresta",1,vgHistory);
+        makeHistoryGUI("Menlyn",2,vgHistory);
     }
     private void makeNotificationGUI(String tag, int index, ViewGroup v) {
         // get a reference to the LayoutInflater service
