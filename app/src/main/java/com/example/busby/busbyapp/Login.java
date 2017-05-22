@@ -120,7 +120,7 @@ public class Login extends AppCompatActivity {
         protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
             m_ProgressDialog.dismiss();
-            if(Common.RESULT_SUCCESS == result) {
+            if(0 <= result) {
                 Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), Store_History.class);
                 i.putExtra("username", username.getText().toString());
