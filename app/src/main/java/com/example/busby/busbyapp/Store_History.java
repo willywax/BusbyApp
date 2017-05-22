@@ -32,7 +32,9 @@ public class Store_History extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        welcome_UserText.setText("Welcome: "+userText);
+
+        String result = userText.substring(0, userText.lastIndexOf("@"));//Separates the domain from the name
+        welcome_UserText.setText("Welcome: "+result);
         ViewGroup vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
         makeNotificationGUI("Photo at Sandton City awaiting response",0,vgNotification);
 
@@ -84,5 +86,6 @@ public class Store_History extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
 
 }
