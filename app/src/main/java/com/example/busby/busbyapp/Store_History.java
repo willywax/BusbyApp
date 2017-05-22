@@ -41,7 +41,7 @@ public class Store_History extends AppCompatActivity {
 
         welcome_UserText.setText("Welcome: "+result);
         ViewGroup vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
-        makeNotificationGUI("Photo at Sandton City awaiting response",0,vgNotification);
+        makeNotificationGUI("Photo at 'Sandton City' awaiting response",0,vgNotification);
 
         ViewGroup vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
         makeHistoryGUI("Sandton City",0,vgHistory);

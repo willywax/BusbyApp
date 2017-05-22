@@ -22,6 +22,11 @@ public class Location extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String locationName = getIntent().getStringExtra("LocationName");
+        if(locationName.indexOf("'")>0){
+            String temp="";
+            temp=locationName.substring(locationName.indexOf("'")+1,locationName.lastIndexOf("'"));
+            locationName=temp;
+        }
         locationMethod(locationName);
     }
     private void locationMethod(String location){
