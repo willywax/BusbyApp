@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import org.jibble.simpleftp.*;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,10 +51,12 @@ import Objects.Notification;
 public class New_Post extends AppCompatActivity {
     private ImageButton postImageButton;
     private Button newPostSubmitButton;
+    private AccessServiceAPI m_ServiceAccess;
     final int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private String userChoosenTask;
     String locName = "New Post";
     private File imageToUpload;
+    private String imageName;
     private ProgressDialog m_ProgressDialog;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class New_Post extends AppCompatActivity {
         if (temp != null) {
             locName = temp + " " + getIntent().getStringExtra("SiteName");
         }
+        m_ServiceAccess = new AccessServiceAPI();
         Log.v("LocationName", locName);
         newPostMethod();
     }
@@ -88,6 +92,7 @@ public class New_Post extends AppCompatActivity {
                 Log.v("Spinner item is: ", "" + newPostThreadSpinner.getSelectedItem().toString());
                 try {
                     new TaskUpload().execute();
+
                 } catch (Exception e) {
                     Log.v("Image not uploaded", "" + e);
                 }
@@ -256,6 +261,45 @@ public class New_Post extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
+            imageName=imageToUpload.toString().substring(imageToUpload.toString().lastIndexOf('/'));
+            Log.v("Image name is:", "/uploads/" + imageName);
+            int ImageID=4;
+            int ImageNumber=4;
+            String ImageURL="path stuff";
+            int StatusID=1;
+            int UserID=7;
+            int SiteID=1;
+            int StoreID=1;
+            int CycleID=1;
+            int CampaignID=1;
+            String TimeByDay="2017/05/18";
+            String Active="TRUE";
+
+            Map<String, String> param = new HashMap<>();
+            param.put("ImageID", ""+ImageID);
+            param.put("ImageNumber", ""+ImageNumber);
+            param.put("Image", ImageURL);
+            param.put("StatusID", ""+StatusID);
+            param.put("UserID", ""+UserID);
+            param.put("SiteID", ""+SiteID);
+            param.put("StoreID", ""+StoreID);
+            param.put("CycleID", ""+CycleID);
+            param.put("CampaignID", ""+CampaignID);
+            param.put("TimeByDay", TimeByDay);
+            param.put("Active", Active);
+
+            JSONObject jObjResult;
+
+            try {
+                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.LOGIN_URL, param));
+                if(jObjResult.getString("result").equalsIgnoreCase("Success")){
+                    Log.v("Post","Success");
+                }else{
+                    Log.v("Post","Fail server side");
+                }
+            } catch (Exception e) {
+                Log.v("Post","Fail");
+            }
             SimpleFTP ftp = new SimpleFTP();
 
 
