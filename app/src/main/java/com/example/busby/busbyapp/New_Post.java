@@ -3,15 +3,20 @@ package com.example.busby.busbyapp;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -23,12 +28,20 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.jibble.simpleftp.*;
+import org.json.JSONArray;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import Objects.Notification;
 
 /**
  * Created by hanop on 2017/05/15.
@@ -37,59 +50,69 @@ import java.io.IOException;
 public class New_Post extends AppCompatActivity {
     private ImageButton postImageButton;
     private Button newPostSubmitButton;
-    final int REQUEST_CAMERA=0,SELECT_FILE=1;
+    final int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private String userChoosenTask;
-    String locName="New Post";
+    String locName = "New Post";
+    private File imageToUpload;
+    private ProgressDialog m_ProgressDialog;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String temp = getIntent().getStringExtra("LocationName");
-        if(temp!=null){
-            locName = temp+" "+getIntent().getStringExtra("SiteName");
+        if (temp != null) {
+            locName = temp + " " + getIntent().getStringExtra("SiteName");
         }
-        Log.v("LocationName",locName);
+        Log.v("LocationName", locName);
         newPostMethod();
     }
-    private void newPostMethod(){
+
+    private void newPostMethod() {
         setContentView(R.layout.new_post_view);
-        postImageButton=(ImageButton)findViewById(R.id.postImageButton);
-        postImageButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        postImageButton = (ImageButton) findViewById(R.id.postImageButton);
+        postImageButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 selectImage();
             }
         });
-        TextView newPostLabel=(TextView)findViewById(R.id.newPostLabel);
+        TextView newPostLabel = (TextView) findViewById(R.id.newPostLabel);
         newPostLabel.setText(locName);
-        final Spinner newPostThreadSpinner=(Spinner)findViewById(R.id.newPostThreadSpinner);
-        String[]tempThreads=new String[]{"Cycle1","Cycle2","Cycle3"};
+        final Spinner newPostThreadSpinner = (Spinner) findViewById(R.id.newPostThreadSpinner);
+        String[] tempThreads = new String[]{"Cycle1", "Cycle2", "Cycle3"};
 
-        ArrayAdapter<String> ThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
+        ArrayAdapter<String> ThreadsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tempThreads);
         ThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newPostThreadSpinner.setAdapter(ThreadsAdapter);
-        newPostSubmitButton=(Button)findViewById(R.id.newPostSubmitButton);
-        newPostSubmitButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Log.v("Spinner item is: ",""+newPostThreadSpinner.getSelectedItem().toString());
+        newPostSubmitButton = (Button) findViewById(R.id.newPostSubmitButton);
+        newPostSubmitButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.v("Spinner item is: ", "" + newPostThreadSpinner.getSelectedItem().toString());
+                try {
+                    new TaskUpload().execute();
+                } catch (Exception e) {
+                    Log.v("Image not uploaded", "" + e);
+                }
+
             }
         });
     }
 
     //from here its the image handling code taken from the link in build 1 resources and adapted
     private void selectImage() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = {"Take Photo", "Choose from Library",
+                "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(New_Post.this);
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result= New_Post.Utility.checkPermission(New_Post.this);
+                boolean result = New_Post.Utility.checkPermission(New_Post.this);
                 if (items[item].equals("Take Photo")) {
-                    userChoosenTask="Take Photo";
-                    if(result)
+                    userChoosenTask = "Take Photo";
+                    if (result)
                         cameraIntent();
                 } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask="Choose from Library";
-                    if(result)
+                    userChoosenTask = "Choose from Library";
+                    if (result)
                         galleryIntent();
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -98,14 +121,14 @@ public class New_Post extends AppCompatActivity {
         });
         builder.show();
     }
+
     public static class Utility {
         public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        public static boolean checkPermission(final Context context)
-        {
+        public static boolean checkPermission(final Context context) {
             int currentAPIVersion = Build.VERSION.SDK_INT;
-            if(currentAPIVersion>=android.os.Build.VERSION_CODES.M)
-            {
+            if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
@@ -132,26 +155,27 @@ public class New_Post extends AppCompatActivity {
             }
         }
     }//end of utility
-    private void cameraIntent()
-    {
+
+    private void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CAMERA);
     }
-    private void galleryIntent()
-    {
+
+    private void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case New_Post.Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(userChoosenTask.equals("Take Photo"))
+                    if (userChoosenTask.equals("Take Photo"))
                         cameraIntent();
-                    else if(userChoosenTask.equals("Choose from Library"))
+                    else if (userChoosenTask.equals("Choose from Library"))
                         galleryIntent();
                 } else {
                     //code for deny
@@ -159,6 +183,7 @@ public class New_Post extends AppCompatActivity {
                 break;
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -169,18 +194,37 @@ public class New_Post extends AppCompatActivity {
                 onCaptureImageResult(data);
         }
     }
+
     @SuppressWarnings("deprecation")
     private void onSelectFromGalleryResult(Intent data) {
-        Bitmap bm=null;
+        Bitmap bm = null;
         if (data != null) {
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                Bitmap thumbnail = bm;
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                File destination = new File(Environment.getExternalStorageDirectory(),
+                        System.currentTimeMillis() + "_comp.jpg");
+                FileOutputStream fo;
+                try {
+                    destination.createNewFile();
+                    fo = new FileOutputStream(destination);
+                    fo.write(bytes.toByteArray());
+                    fo.close();
+                    imageToUpload = destination;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         postImageButton.setImageBitmap(bm);
     }
+
     private void onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -193,11 +237,49 @@ public class New_Post extends AppCompatActivity {
             fo = new FileOutputStream(destination);
             fo.write(bytes.toByteArray());
             fo.close();
+            imageToUpload = destination;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         postImageButton.setImageBitmap(thumbnail);
+    }
+
+    public class TaskUpload extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Open progress dialog during login
+            m_ProgressDialog = ProgressDialog.show(New_Post.this, "Please wait...", "Uploading...", true);
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            SimpleFTP ftp = new SimpleFTP();
+
+
+            // Connect to an FTP server on port 21.
+            try {
+                ftp.connect("ftp.gear.host", 21, "busby-web\\$busby-web", "MEwaqb6hRiegJRsHSYsxtGqWhw5cutwRWtiGNipNmtm9HPWQGNeoqqmpfJ8A");
+                ftp.bin();
+                ftp.cwd("/site/wwwroot/uploads/");
+                Log.v("File is:", "" + imageToUpload);
+                ftp.stor(imageToUpload);
+                // Quit from the FTP server.
+                ftp.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+        @Override
+        protected void onPostExecute(Void result) {
+            m_ProgressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Upload success", Toast.LENGTH_LONG).show();
+
+        }
     }
 }
