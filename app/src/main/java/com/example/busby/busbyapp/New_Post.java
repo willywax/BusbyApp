@@ -262,10 +262,10 @@ public class New_Post extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
             imageName=imageToUpload.toString().substring(imageToUpload.toString().lastIndexOf('/'));
-            Log.v("Image name is:", "/uploads/" + imageName);
+            Log.v("Image name is:", "/uploads" + imageName);
             int ImageID=4;
             int ImageNumber=4;
-            String ImageURL="path stuff";
+            String ImageURL="/uploads"+imageName;
             int StatusID=1;
             int UserID=7;
             int SiteID=1;
@@ -276,8 +276,6 @@ public class New_Post extends AppCompatActivity {
             String Active="TRUE";
 
             Map<String, String> param = new HashMap<>();
-            param.put("ImageID", ""+ImageID);
-            param.put("ImageNumber", ""+ImageNumber);
             param.put("Image", ImageURL);
             param.put("StatusID", ""+StatusID);
             param.put("UserID", ""+UserID);
@@ -286,12 +284,12 @@ public class New_Post extends AppCompatActivity {
             param.put("CycleID", ""+CycleID);
             param.put("CampaignID", ""+CampaignID);
             param.put("TimeByDay", TimeByDay);
-            param.put("Active", Active);
+            param.put("ActiveRecord", Active);
 
             JSONObject jObjResult;
 
             try {
-                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.LOGIN_URL, param));
+                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.IMAGE_PUSH_URL, param));
                 if(jObjResult.getString("result").equalsIgnoreCase("Success")){
                     Log.v("Post","Success");
                 }else{
