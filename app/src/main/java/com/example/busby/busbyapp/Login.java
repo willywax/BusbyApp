@@ -21,7 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +50,7 @@ public class Login extends AppCompatActivity {
         m_ServiceAccess = new AccessServiceAPI();
         username=(EditText)findViewById(R.id.username_input);
         password=(EditText)findViewById(R.id.password_input);
+
         realLogin();
     }
     private void realLogin(){

@@ -40,6 +40,7 @@ public class Store_History extends AppCompatActivity {
         setContentView(R.layout.store_history);
         String username = getIntent().getStringExtra("username");
         idUser = getIntent().getIntExtra("idUser",idUser);
+        Log.v("UserID",""+idUser);
         m_ServiceAccess = new AccessServiceAPI();
 
         storeHistory(username);
@@ -52,6 +53,7 @@ public class Store_History extends AppCompatActivity {
         newPost.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(Store_History.this,New_Post.class);
+                intent.putExtra("UserID",idUser);
                 startActivity(intent);
             }
         });
@@ -73,6 +75,7 @@ public class Store_History extends AppCompatActivity {
         makeHistoryGUI("Sandton City",0,vgHistory);
         makeHistoryGUI("Cresta",1,vgHistory);
         makeHistoryGUI("Menlyn",2,vgHistory);
+        makeHistoryGUI("Random",3,vgHistory);
 
     }
     private void makeNotificationGUI(String tag, int index, ViewGroup v) {
@@ -115,6 +118,7 @@ public class Store_History extends AppCompatActivity {
             Log.v("storeButtonListener","going to page "+buttonText);
             Intent intent = new Intent(getApplicationContext(),Site.class);
             intent.putExtra("LocationName",buttonText);
+            intent.putExtra("UserID",idUser);
             startActivity(intent);
         }
     };

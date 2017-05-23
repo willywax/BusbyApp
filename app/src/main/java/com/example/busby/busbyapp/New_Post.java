@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,20 +27,18 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.jibble.simpleftp.*;
-import org.json.JSONArray;
+import org.jibble.simpleftp.SimpleFTP;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import Objects.Notification;
 
 /**
  * Created by hanop on 2017/05/15.
@@ -58,13 +54,16 @@ public class New_Post extends AppCompatActivity {
     private File imageToUpload;
     private String imageName;
     private ProgressDialog m_ProgressDialog;
-
+    private int UserID;
+    private int SpinnerCycle;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String temp = getIntent().getStringExtra("LocationName");
+        String temp = getIntent().getStringExtra("SiteName");
         if (temp != null) {
-            locName = temp + " " + getIntent().getStringExtra("SiteName");
+            locName = temp + " " + getIntent().getStringExtra("StoreName");
         }
+        UserID=getIntent().getIntExtra("UserID",0);
+        Log.v("UserID",""+UserID);
         m_ServiceAccess = new AccessServiceAPI();
         Log.v("LocationName", locName);
         newPostMethod();
@@ -91,6 +90,8 @@ public class New_Post extends AppCompatActivity {
             public void onClick(View v) {
                 Log.v("Spinner item is: ", "" + newPostThreadSpinner.getSelectedItem().toString());
                 try {
+                    Spinner tempSpinner=(Spinner) findViewById(R.id.newPostThreadSpinner);
+                    SpinnerCycle=tempSpinner.getSelectedItemPosition();
                     new TaskUpload().execute();
 
                 } catch (Exception e) {
@@ -263,24 +264,29 @@ public class New_Post extends AppCompatActivity {
         protected Void doInBackground(Void... arg0) {
             imageName=imageToUpload.toString().substring(imageToUpload.toString().lastIndexOf('/'));
             Log.v("Image name is:", "/uploads" + imageName);
+            String siteName="temp";
+            String storeName="temp";
+            if(!locName.equalsIgnoreCase("New Post")){
+                siteName=getIntent().getStringExtra("SiteName");
+                storeName=getIntent().getStringExtra("StoreName");
+            }
             int ImageID=4;
             int ImageNumber=4;
             String ImageURL="/uploads"+imageName;
-            int StatusID=1;
-            int UserID=7;
-            int SiteID=1;
-            int StoreID=1;
-            int CycleID=1;
-            int CampaignID=1;
-            String TimeByDay="2017/05/18";
+            int StatusID=1;//always default to needs review 2 await, 3 complete
+            int CycleID=SpinnerCycle;
+            int CampaignID=1;//default for now
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm");
+            String currentDateandTime = sdf.format(new Date());
+            String TimeByDay=currentDateandTime;
             String Active="TRUE";
 
             Map<String, String> param = new HashMap<>();
             param.put("Image", ImageURL);
             param.put("StatusID", ""+StatusID);
-            param.put("UserID", ""+UserID);
-            param.put("SiteID", ""+SiteID);
-            param.put("StoreID", ""+StoreID);
+            param.put("UserID", ""+UserID);//gotten from extra
+            param.put("SiteName", ""+siteName);
+            param.put("StoreName", ""+storeName);
             param.put("CycleID", ""+CycleID);
             param.put("CampaignID", ""+CampaignID);
             param.put("TimeByDay", TimeByDay);

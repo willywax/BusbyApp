@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 public class Site extends AppCompatActivity {
     String storeName=null;
+    private int UserID;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String siteName = getIntent().getStringExtra("LocationName");
@@ -34,6 +35,8 @@ public class Site extends AppCompatActivity {
             storeName=siteName.substring(0,siteName.indexOf("-"));
             siteName=temp;
         }
+        UserID=getIntent().getIntExtra("UserID",0);
+        Log.v("UserID",""+UserID);
         locationMethod(siteName);
     }
     private void locationMethod(String location){
@@ -74,8 +77,9 @@ public class Site extends AppCompatActivity {
                 TextView Location_name=(TextView)findViewById(R.id.Location_name);
                 String locationName = ""+Location_name.getText();
                 Intent intent = new Intent(Site.this,New_Post.class);
-                intent.putExtra("LocationName",locationName);
-                intent.putExtra("SiteName",locationSpinner.getSelectedItem().toString());
+                intent.putExtra("SiteName",locationName);
+                intent.putExtra("StoreName",locationSpinner.getSelectedItem().toString());
+                intent.putExtra("UserID",UserID);
                 startActivity(intent);
                 finish();
             }
