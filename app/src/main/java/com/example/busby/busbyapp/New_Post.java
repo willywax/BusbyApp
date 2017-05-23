@@ -42,8 +42,10 @@ public class New_Post extends AppCompatActivity {
     String locName="New Post";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locName = getIntent().getStringExtra("LocationName");
-        locName = locName+" "+getIntent().getStringExtra("SiteName");
+        String temp = getIntent().getStringExtra("LocationName");
+        if(temp!=null){
+            locName = temp+" "+getIntent().getStringExtra("SiteName");
+        }
         Log.v("LocationName",locName);
         newPostMethod();
     }
