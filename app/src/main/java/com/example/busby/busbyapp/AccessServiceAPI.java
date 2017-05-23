@@ -77,6 +77,17 @@ public class AccessServiceAPI {
 
         return jObj;
     }
+    public JSONArray convertJSONString2Array(String jsonString) {
+        JSONArray jArray=null;
+        try {
+            Log.w("convertJSONString2Array", "JsonString=" + jsonString);
+            jArray = new JSONArray(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jArray;
+    }
 
     /**
      * Get json string from URL with method POST

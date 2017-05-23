@@ -17,10 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import Objects.Notification;
 
 /**
  * Created by hanop on 2017/05/15.
@@ -30,16 +33,19 @@ public class Store_History extends AppCompatActivity {
     int idUser;
     private AccessServiceAPI m_ServiceAccess;
     private ProgressDialog m_ProgressDialog;
+    private Set <Notification> notificationSet =new HashSet<>();
+    ViewGroup vgNotification;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_history);
         String username = getIntent().getStringExtra("username");
         idUser = getIntent().getIntExtra("idUser",idUser);
         m_ServiceAccess = new AccessServiceAPI();
+
         storeHistory(username);
     }
     private void storeHistory(String userText){
-        setContentView(R.layout.store_history);
+
 
         final TextView welcome_UserText=(TextView)findViewById(R.id.welcome_UserText);
         final Button newPost=(Button)findViewById(R.id.new_Post);
@@ -56,15 +62,18 @@ public class Store_History extends AppCompatActivity {
             result=userText;
         }
         Log.v("idUser is: ", ""+idUser);
+        vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
         new TaskNotification().execute();
         welcome_UserText.setText("Welcome: "+result);
-        ViewGroup vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
-        makeNotificationGUI("Photo at 'Sandton City' awaiting response",0,vgNotification);
+
+
+
 
         ViewGroup vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
         makeHistoryGUI("Sandton City",0,vgHistory);
         makeHistoryGUI("Cresta",1,vgHistory);
         makeHistoryGUI("Menlyn",2,vgHistory);
+
     }
     private void makeNotificationGUI(String tag, int index, ViewGroup v) {
         // get a reference to the LayoutInflater service
@@ -104,7 +113,7 @@ public class Store_History extends AppCompatActivity {
 
             String buttonText = ((Button) v).getText().toString();
             Log.v("storeButtonListener","going to page "+buttonText);
-            Intent intent = new Intent(getApplicationContext(),Location.class);
+            Intent intent = new Intent(getApplicationContext(),Site.class);
             intent.putExtra("LocationName",buttonText);
             startActivity(intent);
         }
@@ -124,16 +133,21 @@ public class Store_History extends AppCompatActivity {
             //Create data to pass in param
             Map<String, String> param = new HashMap<>();
             param.put("idUser", ""+idUser);
-            JSONObject jObjResult;
 
+            JSONArray notificationArray;
             try {
+                notificationArray= m_ServiceAccess.convertJSONString2Array(m_ServiceAccess.getJSONStringWithParam_POST(Common.NOTIFICATION_URL, param));
+                JSONArray notificationJSONObject=notificationArray.getJSONArray(0);
+                for(int x=0;x<notificationJSONObject.length();x++){
 
-                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.NOTIFICATION_URL, param));
-                JSONArray notificationArray= jObjResult.getJSONArray("result");
-                for(int x=0;x<notificationArray.length();x++){
-                    JSONObject notificationJSONObject=notificationArray.getJSONObject(x);
-                    String notificationID=notificationJSONObject.getString("NotificationID");
-                    Log.v("Notification id is",""+notificationID);
+                    String notificationID=notificationJSONObject.getJSONObject(x).getString("NotificationID");
+                    String storeID=notificationJSONObject.getJSONObject(x).getString("StoreID");
+                    String notificationSite=notificationJSONObject.getJSONObject(x).getString("NotificationSite");
+                    String notificationStore=notificationJSONObject.getJSONObject(x).getString("NotificationStore");
+                    String notificationState=notificationJSONObject.getJSONObject(x).getString("NotificationState");
+                    String time=notificationJSONObject.getJSONObject(x).getString("TimeOfDay");
+                    notificationSet.add(new Notification(Integer.parseInt(notificationID),idUser,Integer.parseInt(storeID),notificationState,notificationSite,notificationStore,time));
+                    Log.v("Notification added",""+notificationSite+" "+notificationStore);
                 }
             } catch (Exception e) {
                 Log.v("Error in background",""+e);
@@ -146,12 +160,13 @@ public class Store_History extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             m_ProgressDialog.dismiss();
-            if(0 <= 1) {
-                Toast.makeText(getApplicationContext(), "Notification success", Toast.LENGTH_LONG).show();
+            int counter=0;
+            for(Notification nS:notificationSet){
+                makeNotificationGUI("Photo at '"+nS.getSite()+"-"+nS.getStore()+"' "+nS.getState(),counter,vgNotification);
 
-            } else {
-                Toast.makeText(getApplicationContext(), "Notification fail", Toast.LENGTH_LONG).show();
             }
+            Toast.makeText(getApplicationContext(), "Notification success", Toast.LENGTH_LONG).show();
+
         }
     }
 

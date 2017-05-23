@@ -22,6 +22,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,9 +39,12 @@ public class New_Post extends AppCompatActivity {
     private Button newPostSubmitButton;
     final int REQUEST_CAMERA=0,SELECT_FILE=1;
     private String userChoosenTask;
+    String locName="New Post";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String username = getIntent().getStringExtra("Username");
+        locName = getIntent().getStringExtra("LocationName");
+        locName = locName+" "+getIntent().getStringExtra("SiteName");
+        Log.v("LocationName",locName);
         newPostMethod();
     }
     private void newPostMethod(){
@@ -50,7 +55,8 @@ public class New_Post extends AppCompatActivity {
                 selectImage();
             }
         });
-
+        TextView newPostLabel=(TextView)findViewById(R.id.newPostLabel);
+        newPostLabel.setText(locName);
         final Spinner newPostThreadSpinner=(Spinner)findViewById(R.id.newPostThreadSpinner);
         String[]tempThreads=new String[]{"Cycle1","Cycle2","Cycle3"};
 

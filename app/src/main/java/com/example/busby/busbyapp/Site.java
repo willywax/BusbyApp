@@ -2,9 +2,9 @@ package com.example.busby.busbyapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,28 +18,45 @@ import android.widget.TextView;
  * Created by hanop on 2017/05/15.
  */
 
-public class Location extends AppCompatActivity {
+public class Site extends AppCompatActivity {
+    String storeName=null;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String locationName = getIntent().getStringExtra("LocationName");
-        if(locationName.indexOf("'")>0){
+        String siteName = getIntent().getStringExtra("LocationName");
+        if(siteName.indexOf("'")>0){
             String temp="";
-            temp=locationName.substring(locationName.indexOf("'")+1,locationName.lastIndexOf("'"));
-            locationName=temp;
+            temp=siteName.substring(siteName.indexOf("'")+1,siteName.lastIndexOf("'"));
+            siteName=temp;
         }
-        locationMethod(locationName);
+        if(siteName.indexOf("-")>0){
+            String temp="";
+            temp=siteName.substring(siteName.indexOf("-")+1,siteName.length());
+            storeName=siteName.substring(0,siteName.indexOf("-"));
+            siteName=temp;
+        }
+        locationMethod(siteName);
     }
     private void locationMethod(String location){
-        setContentView(R.layout.location);
+        setContentView(R.layout.site);
         final TextView Location_name=(TextView)findViewById(R.id.Location_name);
         Location_name.setText(location);
         ViewGroup vgLocation=(ViewGroup)findViewById(R.id.LocationThreadTableLayout);
-        Spinner locationSpinner=(Spinner)findViewById(R.id.location_spinner);
-        String[]tempThreads=new String[]{"Edgars","Markham"};
+        final Spinner locationSpinner=(Spinner)findViewById(R.id.location_spinner);
+        String[]tempThreads=new String[]{"Edgars","Markhams"};
 
         ArrayAdapter<String> newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
         newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(newThreadsAdapter);
+        if(storeName!=null){
+            Log.v("Store name",storeName);
+            int temp=0;
+            for(int x=0;x<tempThreads.length;x++){
+                if(tempThreads[x].equalsIgnoreCase(storeName)){
+                    temp=x;
+                }
+            }
+            locationSpinner.setSelection(temp);
+        }
 
 
         Spinner cycleSpinner=(Spinner)findViewById(R.id.cycle_spinner);
@@ -48,15 +65,17 @@ public class Location extends AppCompatActivity {
         ArrayAdapter<String> newCycleAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempCycle);
         newCycleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cycleSpinner.setAdapter(newCycleAdapter);
-        makeLocationGUI("Dummy location comment",0,vgLocation);
-        makeLocationGUI("Dummy location comment",1,vgLocation);
+        makeLocationGUI("Dummy site comment",0,vgLocation);
+        makeLocationGUI("Dummy site comment",1,vgLocation);
 
         final Button newPostSpecific=(Button)findViewById(R.id.new_Post_Specific);
         newPostSpecific.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                String locationName = getIntent().getStringExtra("LocationName");
-                Intent intent = new Intent(Location.this,New_Post.class);
+                TextView Location_name=(TextView)findViewById(R.id.Location_name);
+                String locationName = ""+Location_name.getText();
+                Intent intent = new Intent(Site.this,New_Post.class);
                 intent.putExtra("LocationName",locationName);
+                intent.putExtra("SiteName",locationSpinner.getSelectedItem().toString());
                 startActivity(intent);
                 finish();
             }
