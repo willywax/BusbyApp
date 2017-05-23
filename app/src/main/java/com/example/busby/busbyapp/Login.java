@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,45 +92,51 @@ public class Login extends AppCompatActivity {
     }
     //sick code from another website
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    public class TaskLogin extends AsyncTask<String, Void, Integer> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //Open progress dialog during login
-            m_ProgressDialog = ProgressDialog.show(Login.this, "Please wait...", "Processing...", true);
-        }
-
-        @Override
-        protected Integer doInBackground(String... params) {
-            //Create data to pass in param
-            Map<String, String> param = new HashMap<>();
-            param.put("action", "login");
-            param.put("username", params[0]);
-            param.put("password", params[1]);
-
-            JSONObject jObjResult;
-            try {
-
-                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.SERVICE_API_URL, param));
-                return jObjResult.getInt("result");
-            } catch (Exception e) {
-                return Common.RESULT_ERROR;
+        public class TaskLogin extends AsyncTask<String, Void, Integer> {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //Open progress dialog during login
+                m_ProgressDialog = ProgressDialog.show(Login.this, "Please wait...", "Processing...", true);
             }
-        }
 
-        @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-        @Override
-        protected void onPostExecute(Integer result) {
-            super.onPostExecute(result);
-            m_ProgressDialog.dismiss();
-            if(0 <= result) {
-                Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(getApplicationContext(), Store_History.class);
-                i.putExtra("username", username.getText().toString());
-                startActivity(i);
-            } else {
-                Toast.makeText(getApplicationContext(), "Login fail", Toast.LENGTH_LONG).show();
+            @Override
+            protected Integer doInBackground(String... params) {
+                //Create data to pass in param
+                Map<String, String> param = new HashMap<>();
+                param.put("action", "login");
+                param.put("username", params[0]);
+                param.put("password", params[1]);
+
+                JSONObject jObjResult;
+
+                try {
+
+                    jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.LOGIN_URL, param));
+
+                    return jObjResult.getInt("result");
+                } catch (Exception e) {
+                    return Common.RESULT_ERROR;
+                }
+
+
+
             }
-        }
+
+            @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+            @Override
+            protected void onPostExecute(Integer result) {
+                super.onPostExecute(result);
+                m_ProgressDialog.dismiss();
+                if(0 <= result) {
+                    Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getApplicationContext(), Store_History.class);
+                    i.putExtra("username", username.getText().toString());
+                    i.putExtra("idUser",result);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Login fail", Toast.LENGTH_LONG).show();
+                }
+            }
     }
 }
