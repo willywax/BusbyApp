@@ -41,6 +41,7 @@ public class Login extends AppCompatActivity {
 
     private JSONArray result;
     private ArrayList<String> users;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_screen);
@@ -118,8 +119,6 @@ public class Login extends AppCompatActivity {
                 } catch (Exception e) {
                     return Common.RESULT_ERROR;
                 }
-
-
 
             }
 

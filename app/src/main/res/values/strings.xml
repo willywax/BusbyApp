@@ -20,4 +20,5 @@
     <string name="history">"History"</string>
     <string name="title_activity_shop">Shop</string>
     <string name="title_activity_shop_preview">ShopPreview</string>
+    <string name="hint">"Enter Location"</string>
 </resources>

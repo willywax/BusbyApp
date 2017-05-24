@@ -5,16 +5,13 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-        android:id="@+id/newPostLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="New Post"
-        android:textSize="30sp" />
-
     <SearchView
-        android:id="@+id/newPostSeachField"
+        android:id="@+id/newPostSearchField"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:layout_width="340dp"
         android:layout_height="wrap_content" />
 
     <ImageButton
