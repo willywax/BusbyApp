@@ -24,12 +24,12 @@ public class SelectLocation extends AppCompatActivity {
 
     Location location;
     public String text;
-
+    private int UserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        UserID=getIntent().getIntExtra("UserID",0);
         selectLocationBinding = DataBindingUtil.setContentView(this, R.layout.select_location);
 
         //Dummy data stored in location class
@@ -81,6 +81,7 @@ public class SelectLocation extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SelectLocation.this, New_Post.class);
                 intent.putExtra("LocationName", text);
+                intent.putExtra("UserID",UserID);
                 startActivity(intent);
 
             }

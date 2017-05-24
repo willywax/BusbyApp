@@ -55,10 +55,11 @@ public class Store_History extends AppCompatActivity {
                 Intent intent = new Intent(Store_History.this,SelectLocation.class);
                 Intent intent1 = new Intent(Store_History.this,New_Post.class);
                 intent1.putExtra("UserID",idUser);
+                intent.putExtra("UserID",idUser);
                 startActivity(intent);
             }
         });
-        String result="";
+        String result;
         if(userText.lastIndexOf("@")>0){
             result = userText.substring(0, userText.lastIndexOf("@"));//Separates the domain from the name
         }else{
@@ -125,7 +126,7 @@ public class Store_History extends AppCompatActivity {
     };
     //sick code from another website
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    public class TaskNotification extends AsyncTask<Void, Void, Void> {
+    private class TaskNotification extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -137,7 +138,7 @@ public class Store_History extends AppCompatActivity {
         protected Void doInBackground(Void... arg0) {
             //Create data to pass in param
             Map<String, String> param = new HashMap<>();
-            param.put("idUser", ""+idUser);
+            param.put("UserID", ""+idUser);
 
             JSONArray notificationArray;
             try {

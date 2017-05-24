@@ -6,15 +6,15 @@ package Objects;
 
 public class Notification {
     private int ID;
-    private int idUser;
+    private int UserID;
     private int StoreID;
     private String State;
     private String Store;
     private String Site;
     private String time;
-    public Notification(int ID, int idUser, int StoreID, String State, String Store,String Site, String time){
+    public Notification(int ID, int UserID, int StoreID, String State, String Store,String Site, String time){
         this.ID=ID;
-        this.idUser=idUser;
+        this.UserID=UserID;
         this.StoreID=StoreID;
         this.setState(State);
         this.Store=Store;
@@ -26,8 +26,8 @@ public class Notification {
         return ID;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public int getUserID() {
+        return UserID;
     }
 
     public int getStoreID() {

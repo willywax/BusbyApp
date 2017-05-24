@@ -34,6 +34,9 @@
             android:alwaysRetainTaskState="true"
             android:label="Store History"
             android:launchMode="singleTask" />
+        <activity android:name=".Site"
+            android:label="Site"
+            android:parentActivityName=".Store_History"/>
         <activity
             android:name=".New_Post"
             android:label="New Post"

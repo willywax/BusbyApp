@@ -60,8 +60,12 @@ public class New_Post extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String temp = getIntent().getStringExtra("SiteName");
-        if (temp != null) {
-            locName = temp + " " + getIntent().getStringExtra("StoreName");
+        Bundle bundle = getIntent().getExtras();
+        locName = bundle.getString("LocationName");
+        if(locName==null){
+            if (temp != null) {
+                locName = temp + " " + getIntent().getStringExtra("StoreName");
+            }
         }
         UserID=getIntent().getIntExtra("UserID",0);
         Log.v("UserID",""+UserID);
@@ -69,8 +73,7 @@ public class New_Post extends AppCompatActivity {
         Log.v("LocationName", locName);
 
         //For location Name
-        Bundle bundle = getIntent().getExtras();
-        locName = bundle.getString("LocationName");
+
 
 
         newPostMethod();
@@ -89,16 +92,15 @@ public class New_Post extends AppCompatActivity {
         final Spinner newPostThreadSpinner = (Spinner) findViewById(R.id.newPostThreadSpinner);
         String[] tempThreads = new String[]{"Cycle1", "Cycle2", "Cycle3"};
 
-        ArrayAdapter<String> ThreadsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tempThreads);
+        ArrayAdapter<String> ThreadsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tempThreads);
         ThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         newPostThreadSpinner.setAdapter(ThreadsAdapter);
         newPostSubmitButton = (Button) findViewById(R.id.newPostSubmitButton);
         newPostSubmitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.v("Spinner item is: ", "" + newPostThreadSpinner.getSelectedItem().toString());
+
                 try {
-                    Spinner tempSpinner=(Spinner) findViewById(R.id.newPostThreadSpinner);
-                    SpinnerCycle=tempSpinner.getSelectedItemPosition();
+                    SpinnerCycle=Integer.parseInt(newPostThreadSpinner.getSelectedItem().toString().substring(newPostThreadSpinner.getSelectedItem().toString().lastIndexOf('e')+1));
                     new TaskUpload().execute();
 
                 } catch (Exception e) {
@@ -135,7 +137,7 @@ public class New_Post extends AppCompatActivity {
         builder.show();
     }
 
-    public static class Utility {
+    private static class Utility {
         public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
