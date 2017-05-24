@@ -33,12 +33,12 @@ public class SelectLocation extends AppCompatActivity {
         selectLocationBinding = DataBindingUtil.setContentView(this, R.layout.select_location);
 
         //Dummy data stored in location class
-        location = new Location("WestGate");
-        location.add("SandtonCity");
-        location.add("ClearWater");
-        location.add("CradleStone");
-        location.add("NorthGate");
-        location.add("EastGate");
+        location = new Location("Edgars","WestGate");
+        location.add("Edgars","SandtonCity");
+        location.add("Markhams","ClearWater");
+        location.add("Markhams","CradleStone");
+        location.add("Edgars","NorthGate");
+        location.add("Edgars","EastGate");
 
 
 

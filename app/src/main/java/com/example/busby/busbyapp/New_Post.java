@@ -50,7 +50,9 @@ public class New_Post extends AppCompatActivity {
     private AccessServiceAPI m_ServiceAccess;
     final int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private String userChoosenTask;
-    String locName = "New Post";
+    String locName = "New-Post";
+    String StoreName;
+    String SiteName;
     private File imageToUpload;
     private String imageName;
     private ProgressDialog m_ProgressDialog;
@@ -59,23 +61,23 @@ public class New_Post extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String temp = getIntent().getStringExtra("SiteName");
+        String temp = getIntent().getStringExtra("StoreName");
         Bundle bundle = getIntent().getExtras();
         locName = bundle.getString("LocationName");
         if(locName==null){
             if (temp != null) {
-                locName = temp + " " + getIntent().getStringExtra("StoreName");
+                locName = temp + "-" + getIntent().getStringExtra("SiteName");
             }
         }
         UserID=getIntent().getIntExtra("UserID",0);
         Log.v("UserID",""+UserID);
         m_ServiceAccess = new AccessServiceAPI();
-        Log.v("LocationName", locName);
 
         //For location Name
-
-
-
+        StoreName=locName.substring(0,locName.indexOf('-'));
+        Log.v("StoreName", StoreName);
+        SiteName=locName.substring(locName.indexOf('-')+1);
+        Log.v("SiteName", SiteName);
         newPostMethod();
     }
 
@@ -273,12 +275,7 @@ public class New_Post extends AppCompatActivity {
         protected Void doInBackground(Void... arg0) {
             imageName=imageToUpload.toString().substring(imageToUpload.toString().lastIndexOf('/'));
             Log.v("Image name is:", "/uploads" + imageName);
-            String siteName="temp";
-            String storeName="temp";
-            if(!locName.equalsIgnoreCase("New Post")){
-                siteName=getIntent().getStringExtra("SiteName");
-                storeName=getIntent().getStringExtra("StoreName");
-            }
+
             int ImageID=4;
             int ImageNumber=4;
             String ImageURL="/uploads"+imageName;
@@ -294,8 +291,8 @@ public class New_Post extends AppCompatActivity {
             param.put("Image", ImageURL);
             param.put("StatusID", ""+StatusID);
             param.put("UserID", ""+UserID);//gotten from extra
-            param.put("SiteName", ""+siteName);
-            param.put("StoreName", ""+storeName);
+            param.put("SiteName", ""+SiteName);
+            param.put("StoreName", ""+StoreName);
             param.put("CycleID", ""+CycleID);
             param.put("CampaignID", ""+CampaignID);
             param.put("TimeByDay", TimeByDay);

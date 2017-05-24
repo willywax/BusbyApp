@@ -8,24 +8,27 @@ import java.util.ArrayList;
 
 public class Location {
     private ArrayList<String> locationArray = new ArrayList<>();
+    private String Store;
+    private String Site;
     private String locationName;
 
 
-    public Location(String a){
-        this.locationName = a;
+    public Location(String Store, String Site){
+        this.Store = Store;
+        this.Site=Site;
+        locationName=Store+"-"+Site;
         locationArray.add(locationName);
     }
     public Location(){
-        this.locationName = "";
     }
 
     public String getLocationName() {
         return locationName;
     }
 
-    public void add(String monthName) {
-        this.locationName = monthName;
-        locationArray.add(monthName);
+    public void add(String Store, String Site) {
+        this.locationName = Store+"-"+Site;
+        locationArray.add(locationName);
     }
 
     public ArrayList<String> getLocationArray() {
@@ -33,11 +36,17 @@ public class Location {
     }
 
 
-
-
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public String getStore() {
+        return Store;
+    }
+
+    public String getSite() {
+        return Site;
     }
 }
 
