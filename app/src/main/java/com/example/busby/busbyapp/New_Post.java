@@ -53,6 +53,7 @@ public class New_Post extends AppCompatActivity {
     String locName = "New-Post";
     String StoreName;
     String SiteName;
+    Boolean imageSelected=false;
     private File imageToUpload;
     private String imageName;
     private ProgressDialog m_ProgressDialog;
@@ -103,7 +104,12 @@ public class New_Post extends AppCompatActivity {
 
                 try {
                     SpinnerCycle=Integer.parseInt(newPostThreadSpinner.getSelectedItem().toString().substring(newPostThreadSpinner.getSelectedItem().toString().lastIndexOf('e')+1));
-                    new TaskUpload().execute();
+                    if(imageSelected){
+                        new TaskUpload().execute();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Select Image", Toast.LENGTH_LONG).show();
+                    }
+
 
                 } catch (Exception e) {
                     Log.v("Image not uploaded", "" + e);
@@ -230,6 +236,7 @@ public class New_Post extends AppCompatActivity {
                     fo.write(bytes.toByteArray());
                     fo.close();
                     imageToUpload = destination;
+                    imageSelected=true;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -255,6 +262,7 @@ public class New_Post extends AppCompatActivity {
             fo.write(bytes.toByteArray());
             fo.close();
             imageToUpload = destination;
+            imageSelected=true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
