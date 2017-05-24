@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 public class Site extends AppCompatActivity {
     String storeName=null;
+
     private int UserID;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -52,8 +52,9 @@ public class Store_History extends AppCompatActivity {
         final Button newPost=(Button)findViewById(R.id.new_Post);
         newPost.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Intent intent = new Intent(Store_History.this,New_Post.class);
-                intent.putExtra("UserID",idUser);
+                Intent intent = new Intent(Store_History.this,SelectLocation.class);
+                Intent intent1 = new Intent(Store_History.this,New_Post.class);
+                intent1.putExtra("UserID",idUser);
                 startActivity(intent);
             }
         });

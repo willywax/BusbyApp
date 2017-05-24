@@ -56,6 +56,7 @@ public class New_Post extends AppCompatActivity {
     private ProgressDialog m_ProgressDialog;
     private int UserID;
     private int SpinnerCycle;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String temp = getIntent().getStringExtra("SiteName");
@@ -66,6 +67,12 @@ public class New_Post extends AppCompatActivity {
         Log.v("UserID",""+UserID);
         m_ServiceAccess = new AccessServiceAPI();
         Log.v("LocationName", locName);
+
+        //For location Name
+        Bundle bundle = getIntent().getExtras();
+        locName = bundle.getString("LocationName");
+
+
         newPostMethod();
     }
 
