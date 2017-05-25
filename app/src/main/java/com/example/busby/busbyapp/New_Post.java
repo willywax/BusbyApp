@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -59,6 +60,8 @@ public class New_Post extends AppCompatActivity {
     private ProgressDialog m_ProgressDialog;
     private int UserID;
     private int SpinnerCycle;
+    private EditText initialCommentText;
+    private String Comment;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +107,8 @@ public class New_Post extends AppCompatActivity {
 
                 try {
                     SpinnerCycle=Integer.parseInt(newPostThreadSpinner.getSelectedItem().toString().substring(newPostThreadSpinner.getSelectedItem().toString().lastIndexOf('e')+1));
+                    initialCommentText=(EditText)findViewById(R.id.initialCommentText);
+                    Comment=initialCommentText.getText().toString();
                     if(imageSelected){
                         new TaskUpload().execute();
                     }else{
@@ -310,8 +315,16 @@ public class New_Post extends AppCompatActivity {
 
             try {
                 jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.IMAGE_PUSH_URL, param));
-                if(jObjResult.getString("result").equalsIgnoreCase("Success")){
-                    Log.v("Post","Success");
+                int temp=jObjResult.getInt("result");
+                if(temp>=0){
+                    Log.v("Post imageID",""+temp);
+                    Map<String, String> comment = new HashMap<>();
+                    comment.put("Comments", ""+Comment);
+                    comment.put("ImageID", ""+temp);
+                    jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.COMMENT_PUSH_URL, comment));
+                    if(jObjResult.getString("result").equalsIgnoreCase("Success")){
+                        Log.v("Comment Posted",""+temp);
+                    }
                 }else{
                     Log.v("Post","Fail server side");
                 }
