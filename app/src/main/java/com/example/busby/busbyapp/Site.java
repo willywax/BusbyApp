@@ -45,16 +45,18 @@ import Objects.Notification;
 
 public class Site extends AppCompatActivity {
     String storeName=null;
-    private LinkedList<String>Stores=new LinkedList<>();
+    private Set<String>Stores=new HashSet<>();
     private int UserID;
     private AccessServiceAPI m_ServiceAccess;
     private ProgressDialog m_ProgressDialog;
     private String localStoreName;
+    private int localCycle;
     String siteName;
     ViewGroup vgLocation;
     private LinkedList<Image> imageSet =new LinkedList<>();
     private LinkedList<Image>storeImageSet=new LinkedList<>();
-    private Boolean firstCall;
+    private Boolean firstCallSite;
+    private Boolean firstCallCycle;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         m_ServiceAccess = new AccessServiceAPI();
@@ -71,7 +73,8 @@ public class Site extends AppCompatActivity {
             storeName=siteName.substring(0,siteName.indexOf("-"));
             siteName=temp;
         }
-        firstCall=true;
+        firstCallSite=true;
+        firstCallCycle=true;
         UserID=getIntent().getIntExtra("UserID",0);
         Log.v("UserID",""+UserID);
         new TaskStores().execute();
@@ -83,6 +86,7 @@ public class Site extends AppCompatActivity {
         Location_name.setText(location);
 
         final Spinner locationSpinner=(Spinner)findViewById(R.id.location_spinner);
+        final Spinner cycleSpinner=(Spinner)findViewById(R.id.cycle_spinner);//todo
         String[] tempArray=new String[Stores.size()];
         int counter=0;
         for(String x:Stores){
@@ -105,10 +109,27 @@ public class Site extends AppCompatActivity {
         }
         locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if(firstCall){
-                    firstCall=false;
+                if(firstCallSite){
+                    firstCallSite=false;
                 }else{
                     localStoreName=locationSpinner.getSelectedItem().toString();
+                    localCycle=cycleSpinner.getSelectedItemPosition();
+                    new TaskImages().execute();
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parentView) {
+                return;
+            }
+
+        });
+        cycleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(firstCallCycle){
+                    firstCallCycle=false;
+                }else{
+                    localStoreName=locationSpinner.getSelectedItem().toString();
+                    localCycle=cycleSpinner.getSelectedItemPosition();
                     new TaskImages().execute();
                 }
             }
@@ -120,8 +141,7 @@ public class Site extends AppCompatActivity {
         });
 
 
-        Spinner cycleSpinner=(Spinner)findViewById(R.id.cycle_spinner);
-        String[]tempCycle=new String[]{"Cycle1","Cycle2"};
+        String[]tempCycle=new String[]{"Cycle1","Cycle2","Cycle3"};
 
         ArrayAdapter<String> newCycleAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempCycle);
         newCycleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -142,6 +162,7 @@ public class Site extends AppCompatActivity {
         });
 
         localStoreName=locationSpinner.getSelectedItem().toString();
+        localCycle=cycleSpinner.getSelectedItemPosition();
         new TaskImages().execute();
     }
     private void makeLocationGUI(Image currentImage, int index) {
@@ -240,7 +261,7 @@ public class Site extends AppCompatActivity {
             param.put("UserID", ""+UserID);
             param.put("SiteName",siteName);
             param.put("StoreName",localStoreName);
-            param.put("CycleID",""+1);
+            param.put("CycleID",""+(localCycle+1));
 
             JSONArray imageArray;
             try {
