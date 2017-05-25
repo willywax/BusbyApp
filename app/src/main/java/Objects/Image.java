@@ -1,5 +1,7 @@
 package Objects;
 
+import java.util.LinkedList;
+
 /**
  * Created by Hano on 5/23/2017.
  */
@@ -9,20 +11,21 @@ public class Image {
     private int imageNumber;
     private int StatusID;
     private int UserID;
-    private int SiteID;
-    private int StoreID;
+    private String SiteName;
+    private String StoreName;
     private int CycleID;
     private int CampaignID;
     private String imageURL;
     private String TimeByDay;
     private String Active;
-    public Image(int imageID, int imageNumber, String imageURL, int StatusID, int UserID, int SiteID, int StoreID, int CycleID, int CampaignID, String TimeByDay, String Active){
+    private LinkedList<String>Comments=new LinkedList<>();
+    public Image(int imageID, int imageNumber, String imageURL, int StatusID, int UserID, String SiteName, String StoreName, int CycleID, int CampaignID, String TimeByDay, String Active){
         this.setImageID(imageID);
         this.setImageNumber(imageNumber);
         this.setStatusID(StatusID);
         this.setUserID(UserID);
-        this.setSiteID(SiteID);
-        this.setStoreID(StoreID);
+        this.setSiteName(SiteName);
+        this.setStoreName(StoreName);
         this.setCycleID(CycleID);
         this.setCampaignID(CampaignID);
         this.setImageURL(imageURL);
@@ -62,20 +65,20 @@ public class Image {
         UserID = userID;
     }
 
-    public int getSiteID() {
-        return SiteID;
+    public String getSiteName() {
+        return SiteName;
     }
 
-    public void setSiteID(int siteID) {
-        SiteID = siteID;
+    public void setSiteName(String siteName) {
+        SiteName = siteName;
     }
 
-    public int getStoreID() {
-        return StoreID;
+    public String getStoreName() {
+        return StoreName;
     }
 
-    public void setStoreID(int storeID) {
-        StoreID = storeID;
+    public void setStoreName(String storeName) {
+        StoreName = storeName;
     }
 
     public int getCycleID() {
@@ -116,5 +119,11 @@ public class Image {
 
     public void setActive(String active) {
         Active = active;
+    }
+    public void addComments(String comment){
+        Comments.add(comment);
+    }
+    public LinkedList<String> getComments(){
+        return Comments;
     }
 }

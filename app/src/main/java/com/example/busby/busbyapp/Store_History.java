@@ -74,10 +74,8 @@ public class Store_History extends AppCompatActivity {
 
 
         ViewGroup vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
-        makeHistoryGUI("Sandton City",0,vgHistory);
-        makeHistoryGUI("Cresta",1,vgHistory);
-        makeHistoryGUI("Menlyn",2,vgHistory);
-        makeHistoryGUI("Random",3,vgHistory);
+        makeHistoryGUI("Sandton",0,vgHistory);
+        makeHistoryGUI("Eastgate",1,vgHistory);
 
     }
     private void makeNotificationGUI(String tag, int index, ViewGroup v) {

@@ -7,7 +7,10 @@ public class Common {
     static final String LOGIN_URL = "http://busby-web.gear.host/android_php/login.php";
     static final String NOTIFICATION_URL = "http://busby-web.gear.host/android_php/notification.php";
     static final String IMAGE_PUSH_URL = "http://busby-web.gear.host/android_php/ImagePost.php";
+    static final String IMAGE_PULL = "http://busby-web.gear.host/android_php/ImagePull.php";
+    static final String IMAGE_PULL_GENERAL = "http://busby-web.gear.host/android_php/ImagePullGeneral.php";
     static final String COMMENT_PUSH_URL = "http://busby-web.gear.host/android_php/CommentPost.php";
+    static final String COMMENT_PULL = "http://busby-web.gear.host/android_php/CommentPull.php";
     static final String Site_URL = "http://busby-web.gear.host/android_php/SearchSite.php";
     static final String Store_URL = "http://busby-web.gear.host/android_php/SearchStore.php";
     static final int RESULT_ERROR= -1;
