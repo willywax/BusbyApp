@@ -57,6 +57,7 @@ public class Site extends AppCompatActivity {
     private LinkedList<Image>storeImageSet=new LinkedList<>();
     private Boolean firstCallSite;
     private Boolean firstCallCycle;
+    private Boolean emptyView;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         m_ServiceAccess = new AccessServiceAPI();
@@ -75,6 +76,7 @@ public class Site extends AppCompatActivity {
         }
         firstCallSite=true;
         firstCallCycle=true;
+        emptyView=false;
         UserID=getIntent().getIntExtra("UserID",0);
         Log.v("UserID",""+UserID);
         new TaskStores().execute();
@@ -267,6 +269,9 @@ public class Site extends AppCompatActivity {
             try {
                 imageArray= m_ServiceAccess.convertJSONString2Array(m_ServiceAccess.getJSONStringWithParam_POST(Common.IMAGE_PULL, param));
                 JSONArray imageJSONObject=imageArray.getJSONArray(0);
+                if(imageJSONObject.length()==0){
+                    emptyView=true;
+                }
                 for(int x=0;x<imageJSONObject.length();x++){
                     int ImageID=imageJSONObject.getJSONObject(x).getInt("ImageID");
                     int ImageNumber=imageJSONObject.getJSONObject(x).getInt("ImageNumber");
@@ -305,6 +310,13 @@ public class Site extends AppCompatActivity {
                 makeLocationGUI(temp,counter);
                 counter++;
             }
+            if(emptyView){
+                vgLocation=(ViewGroup)findViewById(R.id.LocationThreadTableLayout);
+                vgLocation.removeAllViews();
+                emptyView=false;
+            }
+
+
             Toast.makeText(getApplicationContext(), "Notification success", Toast.LENGTH_LONG).show();
 
         }
