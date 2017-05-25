@@ -86,7 +86,7 @@ public class Site extends AppCompatActivity {
         Location_name.setText(location);
 
         final Spinner locationSpinner=(Spinner)findViewById(R.id.location_spinner);
-        final Spinner cycleSpinner=(Spinner)findViewById(R.id.cycle_spinner);//todo
+        final Spinner cycleSpinner=(Spinner)findViewById(R.id.cycle_spinner);
         String[] tempArray=new String[Stores.size()];
         int counter=0;
         for(String x:Stores){
