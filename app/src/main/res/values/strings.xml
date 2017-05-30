@@ -21,4 +21,9 @@
     <string name="title_activity_shop">Shop</string>
     <string name="title_activity_shop_preview">ShopPreview</string>
     <string name="hint">"Enter Location"</string>
+    <string name="refresh">"refresh"</string>
+    <string name="log_out">"Log Out"</string>
+    <string name="log_in">"Log In"</string>
+    <string name="image_description">"Busby Logo"</string>
+    <string name="remember_password">"Remember Password</string>
 </resources>

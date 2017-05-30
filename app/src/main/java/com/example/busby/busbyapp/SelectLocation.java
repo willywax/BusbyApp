@@ -54,29 +54,22 @@ public class SelectLocation extends AppCompatActivity {
         new TaskSiteStore().execute();
 
 
-
-
         selectLocationBinding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //sets text in the search view (auto complete)
                 text = adapterView.getItemAtPosition(i).toString();
                 searchView.setQuery(text, false);
-
+                Intent intent = new Intent(SelectLocation.this, New_Post.class);
+                intent.putExtra("LocationName", text);
+                intent.putExtra("UserID", UserID);
+                //m_ProgressDialog.dismiss();
+                startActivity(intent);
                 //finish();
             }
         });
-        selectLocationBinding.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SelectLocation.this, New_Post.class);
-                intent.putExtra("LocationName", text);
-                intent.putExtra("UserID",UserID);
-                startActivity(intent);
-
-            }
-        });
     }
+
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     private class TaskSiteStore extends AsyncTask<Void, Void, Void> {
         @Override
@@ -134,7 +127,7 @@ public class SelectLocation extends AppCompatActivity {
 
             searchView = (SearchView) findViewById(R.id.search);
             searchView.setActivated(true);
-            searchView.setQueryHint("Type your word here");
+            searchView.setQueryHint("Type Location here ");
             searchView.onActionViewExpanded();
             searchView.setIconified(false);
             searchView.clearFocus();

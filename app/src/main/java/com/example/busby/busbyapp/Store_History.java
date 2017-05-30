@@ -10,6 +10,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +38,7 @@ public class Store_History extends AppCompatActivity {
     private ProgressDialog m_ProgressDialog;
     private Set <Notification> notificationSet =new HashSet<>();
     ViewGroup vgNotification;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_history);
@@ -43,8 +47,26 @@ public class Store_History extends AppCompatActivity {
         Log.v("UserID",""+idUser);
         m_ServiceAccess = new AccessServiceAPI();
 
+
         storeHistory(username);
     }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflate = getMenuInflater();
+        inflate.inflate(R.menu.option_menu,menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.logout:
+                m_ProgressDialog = ProgressDialog.show(Store_History.this, "Logging Out...","Log Out Success",true);
+                this.finish();
+                break;
+        }
+        return true;
+    }
+
     private void storeHistory(String userText){
 
 
