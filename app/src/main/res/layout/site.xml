@@ -26,11 +26,13 @@
     </RelativeLayout>
 
     <Spinner
+        style="@style/spinner_style"
         android:id="@+id/location_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Spinner
+        style="@style/spinner_style"
         android:id="@+id/cycle_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
