@@ -317,7 +317,7 @@ public class Site extends AppCompatActivity {
             }
 
 
-            Toast.makeText(getApplicationContext(), "Notification success", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Image Load success", Toast.LENGTH_LONG).show();
 
         }
     }
