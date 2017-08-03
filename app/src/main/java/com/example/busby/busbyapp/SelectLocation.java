@@ -40,11 +40,13 @@ public class SelectLocation extends AppCompatActivity {
     ArrayList<Location> finalLocation;
     public String text;
     private int UserID;
+    private String Username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UserID=getIntent().getIntExtra("UserID",0);
+        Username = getIntent().getStringExtra("Username");
         selectLocationBinding = DataBindingUtil.setContentView(this, R.layout.select_location);
 
         m_ServiceAccess = new AccessServiceAPI();
@@ -63,6 +65,7 @@ public class SelectLocation extends AppCompatActivity {
                 Intent intent = new Intent(SelectLocation.this, New_Post.class);
                 intent.putExtra("LocationName", text);
                 intent.putExtra("UserID", UserID);
+                intent.putExtra("Username", Username);
                 //m_ProgressDialog.dismiss();
                 startActivity(intent);
                 //finish();

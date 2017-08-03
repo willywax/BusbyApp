@@ -54,11 +54,13 @@ public class New_Post extends AppCompatActivity {
     String locName = "New-Post";
     String StoreName;
     String SiteName;
+    int StoreID;
     Boolean imageSelected=false;
     private File imageToUpload;
     private String imageName;
     private ProgressDialog m_ProgressDialog;
     private int UserID;
+    private String Username;
     private int SpinnerCycle;
     private EditText initialCommentText;
     private String Comment;
@@ -74,7 +76,7 @@ public class New_Post extends AppCompatActivity {
             }
         }
         UserID=getIntent().getIntExtra("UserID",0);
-        Log.v("UserID",""+UserID);
+        Username=getIntent().getStringExtra("Username");
         m_ServiceAccess = new AccessServiceAPI();
 
         //For location Name
@@ -304,6 +306,7 @@ public class New_Post extends AppCompatActivity {
             param.put("Image", ImageURL);
             param.put("StatusID", ""+StatusID);
             param.put("UserID", ""+UserID);//gotten from extra
+            param.put("Username",Username);//gotten from extra
             param.put("SiteName", ""+SiteName);
             param.put("StoreName", ""+StoreName);
             param.put("CycleID", ""+CycleID);
@@ -321,6 +324,7 @@ public class New_Post extends AppCompatActivity {
                     Map<String, String> comment = new HashMap<>();
                     comment.put("Comments", ""+Comment);
                     comment.put("ImageID", ""+temp);
+                    comment.put("Username",Username);
                     jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.COMMENT_PUSH_URL, comment));
                     if(jObjResult.getString("result").equalsIgnoreCase("Success")){
                         Log.v("Comment Posted",""+temp);
@@ -330,6 +334,34 @@ public class New_Post extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 Log.v("Post","Fail");
+            }
+
+            //new
+            try{
+                try{
+                    Map<String, String> storeIDMap = new HashMap<>();
+                    storeIDMap.put("SiteName", ""+SiteName);
+                    storeIDMap.put("StoreName", ""+StoreName);
+                    jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.StoreID_PULL, storeIDMap));
+                    StoreID=jObjResult.getInt("result");
+                    Log.v("Store ID",""+StoreID);
+
+                }catch(Exception e){
+                    Log.v("Post","Fail notification");
+                }
+                Map<String, String> notificationMap = new HashMap<>();
+                notificationMap.put("UserID", ""+UserID);
+                notificationMap.put("StoreID", ""+StoreID);
+                notificationMap.put("NotificationState", ""+"Needs Review");
+                notificationMap.put("NotificationSite", ""+SiteName);
+                notificationMap.put("NotificationStore", ""+StoreName);
+                notificationMap.put("TimeOfDay", ""+TimeByDay);
+                    jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.NOTIFICATION_PUSH_URL, notificationMap));
+                if(jObjResult.getString("result").equalsIgnoreCase("Success")){
+                    Log.v("Comment Posted","user id: "+UserID);
+                }
+            }catch(Exception e){
+                Log.v("Post","Fail notification");
             }
             SimpleFTP ftp = new SimpleFTP();
 

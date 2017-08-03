@@ -182,7 +182,8 @@ public class Site extends AppCompatActivity {
         ArrayAdapter <String>newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
         newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationThreadSpinner.setAdapter(newThreadsAdapter);
-
+        Spinner stateSpinner=(Spinner) newTagView.findViewById(R.id.newThreadSpinner);
+        stateSpinner.setEnabled(false);
         TextView newThreadTextView=(TextView) newTagView.findViewById(R.id.newThreadTextView);
         newThreadTextView.setText(currentImage.getComments().getFirst());//for now single comment
         ImageView tempImage=(ImageView)newTagView.findViewById(R.id.newThreadImage) ;

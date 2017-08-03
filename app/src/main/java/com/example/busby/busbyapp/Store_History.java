@@ -34,6 +34,7 @@ import Objects.Notification;
 
 public class Store_History extends AppCompatActivity {
     int idUser;
+    private String Username;
     private AccessServiceAPI m_ServiceAccess;
     private ProgressDialog m_ProgressDialog;
     private Set <Notification> notificationSet =new HashSet<>();
@@ -42,13 +43,14 @@ public class Store_History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_history);
-        String username = getIntent().getStringExtra("username");
+        Username = getIntent().getStringExtra("username");
         idUser = getIntent().getIntExtra("idUser",idUser);
+
         Log.v("UserID",""+idUser);
         m_ServiceAccess = new AccessServiceAPI();
 
 
-        storeHistory(username);
+        storeHistory(Username);
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -75,9 +77,10 @@ public class Store_History extends AppCompatActivity {
         newPost.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(Store_History.this,SelectLocation.class);
-                Intent intent1 = new Intent(Store_History.this,New_Post.class);
-                intent1.putExtra("UserID",idUser);
+                //Intent intent1 = new Intent(Store_History.this,New_Post.class);
+                //intent1.putExtra("UserID",idUser);
                 intent.putExtra("UserID",idUser);
+                intent.putExtra("Username",Username);
                 startActivity(intent);
             }
         });
@@ -141,6 +144,7 @@ public class Store_History extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(),Site.class);
             intent.putExtra("LocationName",buttonText);
             intent.putExtra("UserID",idUser);
+            intent.putExtra("Username",Username);
             startActivity(intent);
         }
     };
