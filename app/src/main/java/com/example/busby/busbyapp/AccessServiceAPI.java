@@ -173,8 +173,7 @@ public class AccessServiceAPI {
     }
 
 
-    public String getJSONStringWithParam_POST(String serviceUrl,String params)
-            throws IOException
+    public String getJSONStringWithParam_POST(String serviceUrl,String params) throws IOException
     {
         JSONArray jsonArray = null;
         String jsonString = null;

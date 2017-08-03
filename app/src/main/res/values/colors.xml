@@ -6,4 +6,5 @@
     <color name="white">#8C9194</color>
     <color name="lightgreen">#C5C2C3</color>
     <color name="colorBlack">#000000</color>
+    <color name="guessAlmostBlack">#333333</color>
 </resources>
