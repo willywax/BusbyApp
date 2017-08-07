@@ -15,12 +15,11 @@
         android:id="@+id/newThreadSpinner"
         android:layout_width="match_parent"
         />
-
-    <TextView
-        android:id="@+id/newThreadTextView"
-        android:inputType="text"
-        android:text="some random comment"
-        android:textSize="8pt" />
+    <TableLayout android:id="@+id/CommentTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:padding="5dp"
+        android:stretchColumns="*">
+    </TableLayout>
 
 
 

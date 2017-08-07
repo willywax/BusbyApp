@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/newThreadTableRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+    <!--shrunk to fit-->
+    <TextView
+        android:id="@+id/newCommentView"
+        android:inputType="text"
+        android:text="some random comment"
+        android:textSize="8pt" />
+
+
+
+</TableLayout>

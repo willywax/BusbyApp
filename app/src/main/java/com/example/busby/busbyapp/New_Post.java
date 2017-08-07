@@ -340,11 +340,11 @@ public class New_Post extends AppCompatActivity {
             try{
                 try{
                     Map<String, String> storeIDMap = new HashMap<>();
-                    storeIDMap.put("SiteName", ""+SiteName);
-                    storeIDMap.put("StoreName", ""+StoreName);
-                    jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.StoreID_PULL, storeIDMap));
+                    storeIDMap.put("SiteName", SiteName);
+                    storeIDMap.put("StoreName", StoreName);
+                    jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.StoreID_PULL,storeIDMap));
                     StoreID=jObjResult.getInt("result");
-                    Log.v("Store ID",""+StoreID);
+                    Log.v("Store ID YAY",""+StoreID);
 
                 }catch(Exception e){
                     Log.v("Post","Fail notification");

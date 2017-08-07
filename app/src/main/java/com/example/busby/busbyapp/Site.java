@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,6 +54,7 @@ public class Site extends AppCompatActivity {
     private int localCycle;
     String siteName;
     ViewGroup vgLocation;
+    ViewGroup vgComments;
     private LinkedList<Image> imageSet =new LinkedList<>();
     private LinkedList<Image>storeImageSet=new LinkedList<>();
     private Boolean firstCallSite;
@@ -61,7 +63,7 @@ public class Site extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         m_ServiceAccess = new AccessServiceAPI();
-
+        new StoreIDTask().execute();
         siteName = getIntent().getStringExtra("LocationName");
         if(siteName.indexOf("'")>0){
             String temp="";
@@ -116,6 +118,7 @@ public class Site extends AppCompatActivity {
                 }else{
                     localStoreName=locationSpinner.getSelectedItem().toString();
                     localCycle=cycleSpinner.getSelectedItemPosition();
+                    vgLocation.removeAllViews();
                     new TaskImages().execute();
                 }
             }
@@ -132,6 +135,7 @@ public class Site extends AppCompatActivity {
                 }else{
                     localStoreName=locationSpinner.getSelectedItem().toString();
                     localCycle=cycleSpinner.getSelectedItemPosition();
+                    vgLocation.removeAllViews();
                     new TaskImages().execute();
                 }
             }
@@ -170,8 +174,10 @@ public class Site extends AppCompatActivity {
     private void makeLocationGUI(Image currentImage, int index) {
         // get a reference to the LayoutInflater service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //LayoutInflater inflater2 = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         vgLocation=(ViewGroup)findViewById(R.id.LocationThreadTableLayout);
-        vgLocation.removeAllViews();
+
+        //vgLocation.removeAllViews();
         // inflate new_tag_view.xml to create new row and set up the contained Buttons
         View newTagView = inflater.inflate(R.layout.thread_view, vgLocation,false);
 
@@ -184,12 +190,25 @@ public class Site extends AppCompatActivity {
         locationThreadSpinner.setAdapter(newThreadsAdapter);
         Spinner stateSpinner=(Spinner) newTagView.findViewById(R.id.newThreadSpinner);
         stateSpinner.setEnabled(false);
-        TextView newThreadTextView=(TextView) newTagView.findViewById(R.id.newThreadTextView);
-        newThreadTextView.setText(currentImage.getComments().getFirst());//for now single comment
+        //TextView newThreadTextView=(TextView) newTagView.findViewById(R.id.newThreadTextView);
+
+
+            //newThreadTextView.setText(currentImage.getComments().getFirst());//for now single comment
+
+
         ImageView tempImage=(ImageView)newTagView.findViewById(R.id.newThreadImage) ;
         new DownloadImageTask((tempImage)).execute("http://busby-web.gear.host/uploads/"+currentImage.getImageURL().substring(currentImage.getImageURL().lastIndexOf('/')+1));
         // add new tag and edit buttons to urlTableLayout at specified row number (index)
+        Log.v("Index here is:",""+index);
         vgLocation.addView(newTagView, index);
+        vgComments=(ViewGroup)newTagView.findViewById(R.id.CommentTableLayout);
+        for(String commentTemp:currentImage.getComments()){
+            View newCommentView=inflater.inflate(R.layout.comment_view, vgComments,false);
+            TextView newComment=(TextView) newCommentView.findViewById(R.id.newCommentView);
+            newComment.setText(commentTemp);
+            vgComments.addView(newCommentView);
+            Log.v("View added supdog","here");
+        }
     }
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     private class TaskStores extends AsyncTask<Void, Void, Void> {
@@ -284,6 +303,7 @@ public class Site extends AppCompatActivity {
                     imageSet.add(new Image(ImageID,ImageNumber, ImageURL,StatusID,UserID,siteName,storeName,1,CampaignID,time,ActiveRecord));
                     Log.v("Image added",""+ImageURL);
                 }
+                LinkedList<Image> tempImageSet =new LinkedList<>();
                 for(Image temp:imageSet){
                     Map<String, String> comment = new HashMap<>();
                     comment.put("imageID", ""+temp.getImageID());
@@ -291,10 +311,12 @@ public class Site extends AppCompatActivity {
                     commentArray= m_ServiceAccess.convertJSONString2Array(m_ServiceAccess.getJSONStringWithParam_POST(Common.COMMENT_PULL, comment));
                     JSONArray commentJSONObject=commentArray.getJSONArray(0);
                     for(int x=0;x<commentJSONObject.length();x++){
-                        imageSet.get(x).addComments(commentJSONObject.getJSONObject(x).getString("comments"));
+                        temp.addComments(commentJSONObject.getJSONObject(x).getString("Username")+": "+commentJSONObject.getJSONObject(x).getString("comments"));
                         Log.v("length() is",""+commentJSONObject.length()+"x is "+x);
                     }
+                    tempImageSet.add(temp);
                 }
+                imageSet=tempImageSet;
             } catch (Exception e) {
                 Log.v("Error in background",""+e);
             }
@@ -308,6 +330,7 @@ public class Site extends AppCompatActivity {
             m_ProgressDialog.dismiss();
             int counter=0;
             for(Image temp:imageSet){
+                Log.v("Image counter ","is: "+counter);
                 makeLocationGUI(temp,counter);
                 counter++;
             }
@@ -343,6 +366,30 @@ public class Site extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
+        }
+    }
+
+    private class StoreIDTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        protected Void doInBackground(Void... arg0) {
+
+                try{
+                    JSONObject jObjResult;
+                    Map<String, String> storeIDMap = new HashMap<>();
+                    storeIDMap.put("SiteName", "Eastgate");
+                    storeIDMap.put("StoreName", "ASJ");
+                    jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.StoreID_PULL,storeIDMap));
+                    int StoreID=jObjResult.getInt("result");
+                    Log.v("Store ID YAY",""+StoreID);
+
+                }catch(Exception e){
+                    Log.v("Post","Fail notification");
+                }
+
+            return null;
         }
     }
 }

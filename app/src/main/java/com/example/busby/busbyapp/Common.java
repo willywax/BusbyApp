@@ -14,7 +14,7 @@ public class Common {
     static final String COMMENT_PULL = "http://busby-web.gear.host/android_php/CommentPull.php";
     static final String Site_URL = "http://busby-web.gear.host/android_php/SearchSite.php";
     static final String Store_URL = "http://busby-web.gear.host/android_php/SearchStore.php";
-    static final String StoreID_PULL = "http://busby-web.gear.host/android_php/StoreIDPull.php";
+    static final String StoreID_PULL = "http://busby-web.gear.host/android_php/StoreId.php";
 
     static final int RESULT_ERROR= -1;
     static final int RESULT_USER_EXISTS = 2;
