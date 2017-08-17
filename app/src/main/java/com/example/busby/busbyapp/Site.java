@@ -197,7 +197,7 @@ public class Site extends AppCompatActivity {
 
 
         ImageView tempImage=(ImageView)newTagView.findViewById(R.id.newThreadImage) ;
-        new DownloadImageTask((tempImage)).execute("http://busby-web.gear.host/uploads/"+currentImage.getImageURL().substring(currentImage.getImageURL().lastIndexOf('/')+1));
+        new DownloadImageTask((tempImage)).execute("http://guess-sa.gear.host/uploads/"+currentImage.getImageURL().substring(currentImage.getImageURL().lastIndexOf('/')+1));
         // add new tag and edit buttons to urlTableLayout at specified row number (index)
         Log.v("Index here is:",""+index);
         vgLocation.addView(newTagView, index);

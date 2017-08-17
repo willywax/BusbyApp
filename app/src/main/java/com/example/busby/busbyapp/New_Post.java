@@ -368,7 +368,7 @@ public class New_Post extends AppCompatActivity {
 
             // Connect to an FTP server on port 21.
             try {
-                ftp.connect("ftp.gear.host", 21, "busby-web\\$busby-web", "MEwaqb6hRiegJRsHSYsxtGqWhw5cutwRWtiGNipNmtm9HPWQGNeoqqmpfJ8A");
+                ftp.connect("ftp.gear.host", 21, "guess-sa\\$guess-sa", "qDWKMgxKL9TsQMAf5vc2XndGhmf5rhzYTw8w0zbqyeJQiBgGkr10x5r7peYp");
                 ftp.bin();
                 ftp.cwd("/site/wwwroot/uploads/");
                 Log.v("File is:", "" + imageToUpload);

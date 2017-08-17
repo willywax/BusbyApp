@@ -39,6 +39,7 @@ public class Store_History extends AppCompatActivity {
     private ProgressDialog m_ProgressDialog;
     private Set <Notification> notificationSet =new HashSet<>();
     ViewGroup vgNotification;
+    Map NotificationTextSet=new HashMap<String,Integer>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class Store_History extends AppCompatActivity {
         makeHistoryGUI("Eastgate",1,vgHistory);
 
     }
-    private void makeNotificationGUI(String tag, int index, ViewGroup v) {
+    private void makeNotificationGUI(String tag, int index, ViewGroup v, int ID) {
         // get a reference to the LayoutInflater service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -117,6 +118,7 @@ public class Store_History extends AppCompatActivity {
         newNotificationButton.setOnClickListener(storeButtonListener);
 
         // add new tag and edit buttons to urlTableLayout at specified row number (index)
+        NotificationTextSet.put(tag,ID);
         v.addView(newTagView, index);
     }
     private void makeHistoryGUI(String tag, int index, ViewGroup v) {
@@ -141,6 +143,7 @@ public class Store_History extends AppCompatActivity {
 
             String buttonText = ((Button) v).getText().toString();
             Log.v("storeButtonListener","going to page "+buttonText);
+            Log.v("Notification ID is ","nothing or"+NotificationTextSet.get(buttonText));
             Intent intent = new Intent(getApplicationContext(),Site.class);
             intent.putExtra("LocationName",buttonText);
             intent.putExtra("UserID",idUser);
@@ -192,8 +195,7 @@ public class Store_History extends AppCompatActivity {
             m_ProgressDialog.dismiss();
             int counter=0;
             for(Notification nS:notificationSet){
-                makeNotificationGUI("Photo at '"+nS.getSite()+"-"+nS.getStore()+"' "+nS.getState(),counter,vgNotification);
-
+                makeNotificationGUI("Photo at '"+nS.getSite()+"-"+nS.getStore()+"' "+nS.getState(),counter,vgNotification, nS.getID());
             }
             Toast.makeText(getApplicationContext(), "Notification success", Toast.LENGTH_LONG).show();
 
