@@ -386,6 +386,9 @@ public class New_Post extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             m_ProgressDialog.dismiss();
             Toast.makeText(getApplicationContext(), "Upload success", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(getApplicationContext(), Store_History.class);
+            i.putExtra("idUser",UserID);
+            startActivity(i);
 
         }
     }

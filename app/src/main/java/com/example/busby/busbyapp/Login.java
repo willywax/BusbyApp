@@ -133,7 +133,7 @@ public class Login extends AppCompatActivity {
                 if(0 <= result) {
                     Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(getApplicationContext(), Store_History.class);
-                    i.putExtra("username", username.getText().toString());
+                    i.putExtra("Username", username.getText().toString());
                     i.putExtra("idUser",result);
                     startActivity(i);
                 } else {

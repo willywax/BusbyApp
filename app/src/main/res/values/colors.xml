@@ -7,4 +7,6 @@
     <color name="lightgreen">#C5C2C3</color>
     <color name="colorBlack">#000000</color>
     <color name="guessAlmostBlack">#333333</color>
+    <color name="titlebackgroundcolor">#ff6c6c</color>
+    <color name="titletextcolor">#FFFF00</color>
 </resources>

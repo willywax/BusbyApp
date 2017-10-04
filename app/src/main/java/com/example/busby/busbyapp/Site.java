@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -46,8 +47,9 @@ import Objects.Notification;
 
 public class Site extends AppCompatActivity {
     String storeName=null;
+    private String Username;
     private Set<String>Stores=new HashSet<>();
-    private int UserID;
+    private int UserID, NotificationID;
     private AccessServiceAPI m_ServiceAccess;
     private ProgressDialog m_ProgressDialog;
     private String localStoreName;
@@ -65,6 +67,7 @@ public class Site extends AppCompatActivity {
         m_ServiceAccess = new AccessServiceAPI();
         new StoreIDTask().execute();
         siteName = getIntent().getStringExtra("LocationName");
+        Username= getIntent().getStringExtra("username");
         if(siteName.indexOf("'")>0){
             String temp="";
             temp=siteName.substring(siteName.indexOf("'")+1,siteName.lastIndexOf("'"));
@@ -80,6 +83,7 @@ public class Site extends AppCompatActivity {
         firstCallCycle=true;
         emptyView=false;
         UserID=getIntent().getIntExtra("UserID",0);
+        NotificationID=getIntent().getIntExtra("NotificationID",-1);
         Log.v("UserID",""+UserID);
         new TaskStores().execute();
 
@@ -162,6 +166,7 @@ public class Site extends AppCompatActivity {
                 intent.putExtra("SiteName",locationName);
                 intent.putExtra("StoreName",locationSpinner.getSelectedItem().toString());
                 intent.putExtra("UserID",UserID);
+                intent.putExtra("Username",Username);
                 startActivity(intent);
                 finish();
             }
@@ -248,6 +253,19 @@ public class Site extends AppCompatActivity {
             } catch (Exception e) {
                 Log.v("Error in background",""+e);
             }
+            try{
+                param = new HashMap<>();
+                param.put("NotificationID", ""+NotificationID);
+                JSONObject jObjResult;
+                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.NOTIFICATION_DELETE_URL, param));
+                if(jObjResult.getString("result").equalsIgnoreCase("Success")){
+                    Log.v("Notification Deleted ",""+NotificationID);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
@@ -260,7 +278,7 @@ public class Site extends AppCompatActivity {
                 Stores.add(temp.getStoreName());
             }
             locationMethod(siteName);
-            Toast.makeText(getApplicationContext(), "Store Name success", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Store Name success", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -341,7 +359,7 @@ public class Site extends AppCompatActivity {
             }
 
 
-            Toast.makeText(getApplicationContext(), "Image Load success", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Image Load success", Toast.LENGTH_LONG).show();
 
         }
     }

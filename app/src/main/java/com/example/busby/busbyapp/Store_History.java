@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,25 +34,50 @@ import Objects.Notification;
  */
 
 public class Store_History extends AppCompatActivity {
-    int idUser;
+    int idUser, notificationDelete;
     private String Username;
     private AccessServiceAPI m_ServiceAccess;
     private ProgressDialog m_ProgressDialog;
     private Set <Notification> notificationSet =new HashSet<>();
+    private Set <String> historySet=new HashSet<>();
     ViewGroup vgNotification;
+    ViewGroup vgHistory;
     Map NotificationTextSet=new HashMap<String,Integer>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_history);
-        Username = getIntent().getStringExtra("username");
+        Username = getIntent().getStringExtra("Username");
         idUser = getIntent().getIntExtra("idUser",idUser);
 
         Log.v("UserID",""+idUser);
         m_ServiceAccess = new AccessServiceAPI();
-
-
+        notificationDelete=-1;
         storeHistory(Username);
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(30000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                storeHistory(Username);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };t.start();
+
+    }
+    protected void onRestart() {
+        super.onRestart();
+        notificationDelete=-1;
+        storeHistory(Username);
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -93,33 +119,45 @@ public class Store_History extends AppCompatActivity {
         }
         Log.v("idUser is: ", ""+idUser);
         vgNotification=(ViewGroup)findViewById(R.id.notificationTableLayout);
+        vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
+        vgHistory.removeAllViewsInLayout();
+        vgNotification.removeAllViewsInLayout();
+        NotificationTextSet.clear();
+        notificationSet.clear();
+        historySet.clear();
         new TaskNotification().execute();
+        new TaskHistory().execute();
         welcome_UserText.setText("Welcome: "+result);
 
 
 
 
-        ViewGroup vgHistory=(ViewGroup)findViewById(R.id.historyTableLayout);
-        makeHistoryGUI("Sandton",0,vgHistory);
-        makeHistoryGUI("Eastgate",1,vgHistory);
+
+        //makeHistoryGUI("Sandton",0,vgHistory);
+        //makeHistoryGUI("Eastgate",1,vgHistory);
 
     }
     private void makeNotificationGUI(String tag, int index, ViewGroup v, int ID) {
         // get a reference to the LayoutInflater service
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(tag.indexOf("Review")>0){
+            Log.v("Notification Ignored:","Tag:"+tag);
+        }else{
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        // inflate new_tag_view.xml to create new row and set up the contained Buttons
-        View newTagView = inflater.inflate(R.layout.notification_view, v,false);
+            // inflate new_tag_view.xml to create new row and set up the contained Buttons
+            View newTagView = inflater.inflate(R.layout.notification_view, v,false);
 
-        // get newTagButton reference, set its text and register its listener
-        Button newNotificationButton = (Button) newTagView.findViewById(R.id.newNotification);
-        newNotificationButton.setText(tag);
+            // get newTagButton reference, set its text and register its listener
+            Button newNotificationButton = (Button) newTagView.findViewById(R.id.newNotification);
+            newNotificationButton.setText(tag);
 
-        newNotificationButton.setOnClickListener(storeButtonListener);
+            newNotificationButton.setOnClickListener(storeButtonListener);
 
-        // add new tag and edit buttons to urlTableLayout at specified row number (index)
-        NotificationTextSet.put(tag,ID);
-        v.addView(newTagView, index);
+            // add new tag and edit buttons to urlTableLayout at specified row number (index)
+            NotificationTextSet.put(tag,ID);
+            v.addView(newTagView, index);
+        }
+
     }
     private void makeHistoryGUI(String tag, int index, ViewGroup v) {
         // get a reference to the LayoutInflater service
@@ -143,11 +181,17 @@ public class Store_History extends AppCompatActivity {
 
             String buttonText = ((Button) v).getText().toString();
             Log.v("storeButtonListener","going to page "+buttonText);
-            Log.v("Notification ID is ","nothing or"+NotificationTextSet.get(buttonText));
+            //Log.v("Notification ID is ","nothing or "+NotificationTextSet.get(buttonText));
+            try {
+                notificationDelete = (int) NotificationTextSet.get(buttonText);
+            }catch(NullPointerException e){
+
+            }
             Intent intent = new Intent(getApplicationContext(),Site.class);
             intent.putExtra("LocationName",buttonText);
             intent.putExtra("UserID",idUser);
             intent.putExtra("Username",Username);
+            intent.putExtra("NotificationID",notificationDelete);
             startActivity(intent);
         }
     };
@@ -197,7 +241,46 @@ public class Store_History extends AppCompatActivity {
             for(Notification nS:notificationSet){
                 makeNotificationGUI("Photo at '"+nS.getSite()+"-"+nS.getStore()+"' "+nS.getState(),counter,vgNotification, nS.getID());
             }
-            Toast.makeText(getApplicationContext(), "Notification success", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Notification success", Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+    private class TaskHistory extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            //Create data to pass in param
+            Map<String, String> param = new HashMap<>();
+            param.put("UserID", ""+idUser);
+
+            JSONArray historyArray;
+            try {
+                historyArray= m_ServiceAccess.convertJSONString2Array(m_ServiceAccess.getJSONStringWithParam_POST(Common.HISTORY, param));
+                JSONArray historyJSONObject=historyArray.getJSONArray(0);
+                for(int x=0;x<historyJSONObject.length();x++){
+                    historySet.add(historyJSONObject.getJSONObject(x).getString("SiteName"));
+                }
+            } catch (Exception e) {
+                Log.v("Error in background",""+e);
+            }
+
+            return null;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+        @Override
+        protected void onPostExecute(Void result) {
+            m_ProgressDialog.dismiss();
+            int counter=0;
+            for(String hS:historySet){
+                makeHistoryGUI(hS,counter,vgHistory);
+            }
 
         }
     }

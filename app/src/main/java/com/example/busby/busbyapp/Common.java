@@ -7,6 +7,8 @@ public class Common {
     static final String LOGIN_URL = "http://guess-sa.gear.host/android_php/login.php";
     static final String NOTIFICATION_URL = "http://guess-sa.gear.host/android_php/notification.php";
     static final String NOTIFICATION_PUSH_URL = "http://guess-sa.gear.host/android_php/notificationPost.php";
+    static final String NOTIFICATION_DELETE_URL = "http://guess-sa.gear.host/android_php/notificationDelete.php";
+    static final String HISTORY = "http://guess-sa.gear.host/android_php/History.php";
     static final String IMAGE_PUSH_URL = "http://guess-sa.gear.host/android_php/ImagePost.php";
     static final String IMAGE_PULL = "http://guess-sa.gear.host/android_php/ImagePull.php";
     static final String IMAGE_PULL_GENERAL = "http://guess-sa.gear.host/android_php/ImagePullGeneral.php";
