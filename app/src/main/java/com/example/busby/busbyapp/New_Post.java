@@ -98,7 +98,8 @@ public class New_Post extends AppCompatActivity {
         TextView newPostLabel = (TextView) findViewById(R.id.newPostLabel);
         newPostLabel.setText(locName);
         final Spinner newPostThreadSpinner = (Spinner) findViewById(R.id.newPostThreadSpinner);
-        String[] tempThreads = new String[]{"Cycle1", "Cycle2", "Cycle3"};
+        String[] tempThreads = new String[]{"Month1", "Month2", "Month3", "Month4",
+                "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12"};
 
         ArrayAdapter<String> ThreadsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tempThreads);
         ThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -108,7 +109,7 @@ public class New_Post extends AppCompatActivity {
             public void onClick(View v) {
 
                 try {
-                    SpinnerCycle=Integer.parseInt(newPostThreadSpinner.getSelectedItem().toString().substring(newPostThreadSpinner.getSelectedItem().toString().lastIndexOf('e')+1));
+                    SpinnerCycle=Integer.parseInt(newPostThreadSpinner.getSelectedItem().toString().substring(newPostThreadSpinner.getSelectedItem().toString().lastIndexOf('h')+1));
                     initialCommentText=(EditText)findViewById(R.id.initialCommentText);
                     Comment=initialCommentText.getText().toString();
                     if(imageSelected){
@@ -368,9 +369,9 @@ public class New_Post extends AppCompatActivity {
 
             // Connect to an FTP server on port 21.
             try {
-                ftp.connect("ftp.gear.host", 21, "guess-sa\\$guess-sa", "qDWKMgxKL9TsQMAf5vc2XndGhmf5rhzYTw8w0zbqyeJQiBgGkr10x5r7peYp");
+                ftp.connect("guessapp.busbyhouse.com", 21, "Administrator", "Busby132");
                 ftp.bin();
-                ftp.cwd("/site/wwwroot/uploads/");
+                ftp.cwd("/uploads/");
                 Log.v("File is:", "" + imageToUpload);
                 ftp.stor(imageToUpload);
                 // Quit from the FTP server.
@@ -388,6 +389,7 @@ public class New_Post extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Upload success", Toast.LENGTH_LONG).show();
             Intent i = new Intent(getApplicationContext(), Store_History.class);
             i.putExtra("idUser",UserID);
+            i.putExtra("Username",Username);
             startActivity(i);
 
         }

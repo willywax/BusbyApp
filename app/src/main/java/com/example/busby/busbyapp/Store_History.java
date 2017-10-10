@@ -54,23 +54,6 @@ public class Store_History extends AppCompatActivity {
         m_ServiceAccess = new AccessServiceAPI();
         notificationDelete=-1;
         storeHistory(Username);
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-                        Thread.sleep(30000);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                storeHistory(Username);
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        };t.start();
 
     }
     protected void onRestart() {

@@ -67,7 +67,7 @@ public class Site extends AppCompatActivity {
         m_ServiceAccess = new AccessServiceAPI();
         new StoreIDTask().execute();
         siteName = getIntent().getStringExtra("LocationName");
-        Username= getIntent().getStringExtra("username");
+        Username= getIntent().getStringExtra("Username");
         if(siteName.indexOf("'")>0){
             String temp="";
             temp=siteName.substring(siteName.indexOf("'")+1,siteName.lastIndexOf("'"));
@@ -151,7 +151,8 @@ public class Site extends AppCompatActivity {
         });
 
 
-        String[]tempCycle=new String[]{"Cycle1","Cycle2","Cycle3"};
+        String[]tempCycle=new String[]{"Month1", "Month2", "Month3", "Month4",
+                "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12"};
 
         ArrayAdapter<String> newCycleAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempCycle);
         newCycleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -193,8 +194,8 @@ public class Site extends AppCompatActivity {
         ArrayAdapter <String>newThreadsAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tempThreads);
         newThreadsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationThreadSpinner.setAdapter(newThreadsAdapter);
-        Spinner stateSpinner=(Spinner) newTagView.findViewById(R.id.newThreadSpinner);
-        stateSpinner.setEnabled(false);
+        locationThreadSpinner.setSelection(currentImage.getStatusID()-1);
+        locationThreadSpinner.setEnabled(false);
         //TextView newThreadTextView=(TextView) newTagView.findViewById(R.id.newThreadTextView);
 
 
@@ -202,7 +203,7 @@ public class Site extends AppCompatActivity {
 
 
         ImageView tempImage=(ImageView)newTagView.findViewById(R.id.newThreadImage) ;
-        new DownloadImageTask((tempImage)).execute("http://guess-sa.gear.host/uploads/"+currentImage.getImageURL().substring(currentImage.getImageURL().lastIndexOf('/')+1));
+        new DownloadImageTask((tempImage)).execute("http://guessapp.busbyhouse.com/uploads/"+currentImage.getImageURL().substring(currentImage.getImageURL().lastIndexOf('/')+1));
         // add new tag and edit buttons to urlTableLayout at specified row number (index)
         Log.v("Index here is:",""+index);
         vgLocation.addView(newTagView, index);
