@@ -112,10 +112,10 @@ public class New_Post extends AppCompatActivity {
                     SpinnerCycle=Integer.parseInt(newPostThreadSpinner.getSelectedItem().toString().substring(newPostThreadSpinner.getSelectedItem().toString().lastIndexOf('h')+1));
                     initialCommentText=(EditText)findViewById(R.id.initialCommentText);
                     Comment=initialCommentText.getText().toString();
-                    if(imageSelected){
+                    if(imageSelected&&Comment.length()>0){
                         new TaskUpload().execute();
                     }else{
-                        Toast.makeText(getApplicationContext(), "Select Image", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Select Image and Type Comment", Toast.LENGTH_LONG).show();
                     }
 
 
